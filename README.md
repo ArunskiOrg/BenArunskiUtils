@@ -9,15 +9,41 @@ Public Claude Code skills and standalone utilities. First up: a skill that turns
 
 ## 30-second install
 
-As Claude Code skills:
+As Claude Code skills.
 
-```
+bash / zsh (macOS, Linux, Git Bash):
+
+```bash
 git clone https://github.com/ArunskiOrg/BenArunskiUtils
 cp -r BenArunskiUtils/skills/tts BenArunskiUtils/skills/explain-yourself ~/.claude/skills/
 uv tool install edge-tts   # or: pipx install edge-tts / pip install edge-tts
 ```
 
+PowerShell (Windows, or PowerShell 7 on macOS/Linux):
+
+```powershell
+git clone https://github.com/ArunskiOrg/BenArunskiUtils
+Copy-Item -Recurse BenArunskiUtils/skills/tts, BenArunskiUtils/skills/explain-yourself "$HOME/.claude/skills/"
+uv tool install edge-tts   # or: pipx install edge-tts / pip install edge-tts
+```
+
+Command Prompt (Windows):
+
+```bat
+git clone https://github.com/ArunskiOrg/BenArunskiUtils
+xcopy /E /I BenArunskiUtils\skills\tts "%USERPROFILE%\.claude\skills\tts"
+xcopy /E /I BenArunskiUtils\skills\explain-yourself "%USERPROFILE%\.claude\skills\explain-yourself"
+uv tool install edge-tts
+```
+
 Then ask Claude to read a document aloud, or explain a PR/commit/diff/file/directory. Each skill's own README covers standalone use (no Claude Code) and full requirements — see [`skills/tts/README.md`](skills/tts/README.md) and [`skills/explain-yourself/README.md`](skills/explain-yourself/README.md).
+
+## Shell conventions in these docs
+
+Commands are written for bash/zsh unless a PowerShell or Command Prompt variant is shown. Two portability notes that apply everywhere:
+
+- `python3` is the interpreter name on macOS and Linux. On Windows use `python` or `py -3`; `python3` there often resolves to a Microsoft Store stub that does nothing.
+- Forward slashes work in paths for every shell listed here, including PowerShell. Only Command Prompt examples use backslashes.
 
 ## Layout
 
@@ -36,10 +62,31 @@ A future skill or utility adds a sibling under `skills/` (or a new top-level fol
 
 ## Development
 
-```
-python3 -m venv .venv && .venv/bin/pip install pytest ruff   # or .venv\Scripts\pip on Windows
+bash / zsh:
+
+```bash
+python3 -m venv .venv
+.venv/bin/pip install pytest ruff
 .venv/bin/python -m pytest
 .venv/bin/python -m ruff check .
+```
+
+PowerShell (Windows venvs put executables in `Scripts`, not `bin`):
+
+```powershell
+python -m venv .venv
+.venv/Scripts/pip install pytest ruff
+.venv/Scripts/python -m pytest
+.venv/Scripts/python -m ruff check .
+```
+
+Command Prompt:
+
+```bat
+python -m venv .venv
+.venv\Scripts\pip install pytest ruff
+.venv\Scripts\python -m pytest
+.venv\Scripts\python -m ruff check .
 ```
 
 See [`CONTRIBUTING.md`](CONTRIBUTING.md).

@@ -4,18 +4,34 @@ Turns a code file, directory, pull request, commit, or diff into an explanation 
 
 ## Install as a Claude Code skill
 
-Copy or symlink this folder into your skills directory, alongside `tts` if you want audio output:
+Copy or symlink this folder into your skills directory, alongside `tts` if you want audio output.
 
-```
+bash / zsh (macOS, Linux, Git Bash):
+
+```bash
 cp -r skills/explain-yourself ~/.claude/skills/explain-yourself
 cp -r skills/tts ~/.claude/skills/tts
+```
+
+PowerShell:
+
+```powershell
+Copy-Item -Recurse skills/explain-yourself "$HOME/.claude/skills/explain-yourself"
+Copy-Item -Recurse skills/tts "$HOME/.claude/skills/tts"
+```
+
+Command Prompt:
+
+```bat
+xcopy /E /I skills\explain-yourself "%USERPROFILE%\.claude\skills\explain-yourself"
+xcopy /E /I skills\tts "%USERPROFILE%\.claude\skills\tts"
 ```
 
 Then ask Claude to explain a PR, commit, diff, file, or directory: "explain PR 482 to me," "walk me through this directory, I'm new to Terraform," "read this diff to me."
 
 ## Requirements
 
-- Python 3.9+ to run `scripts/resolve_source.py`.
+- Python 3.9+ to run `scripts/resolve_source.py`. On Windows, invoke it as `python` or `py -3` rather than `python3`.
 - `git` on `PATH` for commit and diff-file sources.
 - `gh` on `PATH`, authenticated, for pull request sources.
 - The `tts` skill, only if you want the explanation spoken.
@@ -23,7 +39,7 @@ Then ask Claude to explain a PR, commit, diff, file, or directory: "explain PR 4
 ## Standalone use (no Claude Code)
 
 1. Resolve the source into plain text with the standalone script:
-   ```
+   ```bash
    python3 scripts/resolve_source.py 482 -o source.txt              # PR number or URL
    python3 scripts/resolve_source.py HEAD~1 -o source.txt           # commit ref
    python3 scripts/resolve_source.py changes.diff -o source.txt     # diff/patch file, used as-is

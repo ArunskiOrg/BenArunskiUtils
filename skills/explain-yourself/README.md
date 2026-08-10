@@ -1,6 +1,6 @@
 # Explain yourself!
 
-Turns a code file, directory, pull request, commit, or diff into a written explanation shaped to match what it's explaining: a PR or diff gets a file-by-file walkthrough of what changed and why, not a listing of the changed code. A file or directory gets a top-down walkthrough: structure first, then how the pieces interact, then the details that matter. Exact code shows up only where it has to. Speaking the result aloud, via the [`tts`](../tts/README.md) skill, is optional.
+Turns a code file, directory, pull request, commit, or diff into an explanation shaped to match context: a PR or diff gets a file-by-file walkthrough of what changed and why. A file or directory gets a top-down walkthrough. Exact code shows up only where it has to. Speak the result aloud with [`tts`](../tts/README.md).
 
 ## Install as a Claude Code skill
 
@@ -12,6 +12,13 @@ cp -r skills/tts ~/.claude/skills/tts
 ```
 
 Then ask Claude to explain a PR, commit, diff, file, or directory: "explain PR 482 to me," "walk me through this directory, I'm new to Terraform," "read this diff to me."
+
+## Requirements
+
+- Python 3.9+ to run `scripts/resolve_source.py`.
+- `git` on `PATH` for commit and diff-file sources.
+- `gh` on `PATH`, authenticated, for pull request sources.
+- The `tts` skill, only if you want the explanation spoken.
 
 ## Standalone use (no Claude Code)
 
@@ -25,11 +32,4 @@ Then ask Claude to explain a PR, commit, diff, file, or directory: "explain PR 4
    ```
    It prints `{"output_path": "...", "kind": "..."}`; `kind` tells you which explanation shape applies next.
 2. Feed `source.txt`, `agents/explainer.md`, the `kind` value, and any context about the reader ("I'm a novice in Terraform") to any capable LLM chat. Save its reply.
-3. That's the deliverable. If you also want audio, render it with `tts`'s standalone path (see its README).
-
-## Requirements
-
-- Python 3.9+ to run `scripts/resolve_source.py`.
-- `git` on `PATH` for commit and diff-file sources.
-- `gh` on `PATH`, authenticated, for pull request sources.
-- The `tts` skill, only if you want the explanation spoken.
+3. That's it! If you also want audio, render it with `tts`'s standalone path (see its README).

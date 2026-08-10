@@ -1,20 +1,24 @@
 #!/usr/bin/env python3
 # SPDX-License-Identifier: MIT
-"""Resolve a pull request, commit, diff file, or code excerpt into one text blob.
+"""Resolve a pull request, commit, diff file, directory, or code excerpt into one text blob.
 
 Standalone: works with or without Claude Code. Requires git on PATH for
 commit/diff sources, and gh (authenticated) for pull request sources.
 
 Usage:
-    python3 resolve_source.py <source> -o <output.txt> [--kind pr|commit|diff|code]
+    python3 resolve_source.py <source> -o <output.txt> [--kind pr|commit|diff|code|directory]
 
 <source> is one of:
     a PR number or URL           (e.g. 482, https://github.com/org/repo/pull/482)
     a commit SHA or ref          (e.g. HEAD~1, a1b2c3d)
     a path ending .diff or .patch
+    a directory path             (its immediate files only, not subdirectories)
     a code file path, optionally with a line range: path/to/file.py:10-40
+
+Prints one JSON line to stdout on success: {"output_path": "...", "kind": "..."}
 """
 import argparse
+import json
 import pathlib
 import re
 import subprocess
@@ -61,12 +65,34 @@ def resolve_code(path_spec: str) -> str:
     return pathlib.Path(path_spec).read_text(encoding="utf-8")
 
 
+def resolve_directory(path: str) -> str:
+    directory = pathlib.Path(path)
+    files = sorted(p for p in directory.iterdir() if p.is_file())
+    if not files:
+        sys.exit(f"No files found directly in: {path}")
+    parts = []
+    for file_path in files:
+        try:
+            content = file_path.read_text(encoding="utf-8")
+        except UnicodeDecodeError:
+            continue  # skip binary files
+        parts.append(f"===== {file_path.name} =====\n{content}")
+    if not parts:
+        sys.exit(f"No readable text files found directly in: {path}")
+    return "\n\n".join(parts)
+
+
 def guess_kind(source: str) -> str:
     if source.endswith((".diff", ".patch")):
         return "diff"
     if re.fullmatch(r"\d+", source) or "/pull/" in source:
         return "pr"
-    if pathlib.Path(source.split(":")[0]).exists():
+    # Strip only a genuine trailing ":START-END" line range, not every colon —
+    # a naive split(":")[0] also truncates a Windows drive letter (C:/Users/...).
+    path = pathlib.Path(LINE_RANGE_RE.sub("", source))
+    if path.is_dir():
+        return "directory"
+    if path.exists():
         return "code"
     return "commit"
 
@@ -76,6 +102,7 @@ RESOLVERS = {
     "commit": resolve_commit,
     "diff": resolve_diff_file,
     "code": resolve_code,
+    "directory": resolve_directory,
 }
 
 
@@ -93,7 +120,7 @@ def main():
 
     args.output.parent.mkdir(parents=True, exist_ok=True)
     args.output.write_text(text, encoding="utf-8")
-    print(f"Wrote {args.output} ({kind})")
+    print(json.dumps({"output_path": str(args.output), "kind": kind}))
 
 
 if __name__ == "__main__":

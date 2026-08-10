@@ -1,11 +1,11 @@
 # BenArunskiUtils
 
-Public Claude Code skills and standalone utilities. First up: two skills that turn documents and code changes into spoken-word audio. More skills and utilities will land here over time under the same layout.
+Public Claude Code skills and standalone utilities. First up: a skill that turns a document into spoken-word audio, and one that explains code the way you'd want it explained. More skills and utilities will land here over time under the same layout.
 
 ## What's here
 
 - [`tts`](skills/tts/) — turns a document into an MP3. Rewrites it into speech-friendly prose first (TTS engines mangle code, symbols, tables, and markdown), then renders with `edge-tts`.
-- [`code-narrator`](skills/code-narrator/) — turns a pull request, commit, diff, or code excerpt into spoken narration. A diff read aloud verbatim is unlistenable, so it writes an explanation of the change first, then hands that to `tts`.
+- [`explain-yourself`](skills/explain-yourself/) — explains a code file, directory, pull request, commit, or diff, matching the explanation to what it's explaining: a file-by-file walkthrough for a PR or diff, a top-down structure-then-details walkthrough for a file or directory. Speaking the result aloud, via `tts`, is optional.
 
 ## 30-second install
 
@@ -13,11 +13,11 @@ As Claude Code skills:
 
 ```
 git clone https://github.com/ArunskiOrg/BenArunskiUtils
-cp -r BenArunskiUtils/skills/tts BenArunskiUtils/skills/code-narrator ~/.claude/skills/
+cp -r BenArunskiUtils/skills/tts BenArunskiUtils/skills/explain-yourself ~/.claude/skills/
 uv tool install edge-tts   # or: pipx install edge-tts / pip install edge-tts
 ```
 
-Then ask Claude to read a document aloud, or narrate a PR/commit/diff. Each skill's own README covers standalone use (no Claude Code) and full requirements — see [`skills/tts/README.md`](skills/tts/README.md) and [`skills/code-narrator/README.md`](skills/code-narrator/README.md).
+Then ask Claude to read a document aloud, or explain a PR/commit/diff/file/directory. Each skill's own README covers standalone use (no Claude Code) and full requirements — see [`skills/tts/README.md`](skills/tts/README.md) and [`skills/explain-yourself/README.md`](skills/explain-yourself/README.md).
 
 ## Layout
 

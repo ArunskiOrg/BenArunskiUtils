@@ -1,5 +1,9 @@
+import json
+import sys
+
 import pytest
-from resolve_source import guess_kind, resolve_code, resolve_diff_file
+import resolve_source
+from resolve_source import guess_kind, resolve_code, resolve_diff_file, resolve_directory
 
 
 @pytest.mark.parametrize(
@@ -17,6 +21,13 @@ def test_guess_kind_from_source_shape(source, expected_kind):
     # When guessing the source kind from its shape alone
     # Then it classifies by the documented resolution order
     assert guess_kind(source) == expected_kind
+
+
+def test_guess_kind_identifies_a_real_directory(tmp_path):
+    # Given a source path that is a real directory
+    # When guessing the kind
+    # Then it's classified as "directory", not "code"
+    assert guess_kind(str(tmp_path)) == "directory"
 
 
 def test_guess_kind_prefers_pr_over_a_same_named_file(tmp_path, monkeypatch):
@@ -65,3 +76,54 @@ def test_resolve_diff_file_returns_file_contents_verbatim(tmp_path):
 
     # Then it is used as-is, with no transformation
     assert text == "--- a/x\n+++ b/x\n"
+
+
+def test_resolve_directory_concatenates_immediate_files_with_name_headers(tmp_path):
+    # Given a directory with two files, sorted out of alphabetical write order
+    (tmp_path / "b.tf").write_text("resource b", encoding="utf-8")
+    (tmp_path / "a.tf").write_text("resource a", encoding="utf-8")
+
+    # When resolving the directory
+    text = resolve_directory(str(tmp_path))
+
+    # Then each file appears once, alphabetically, under a name header
+    assert text == "===== a.tf =====\nresource a\n\n===== b.tf =====\nresource b"
+
+
+def test_resolve_directory_skips_subdirectories(tmp_path):
+    # Given a directory containing both a file and a nested subdirectory
+    (tmp_path / "top.tf").write_text("top level", encoding="utf-8")
+    nested = tmp_path / "modules"
+    nested.mkdir()
+    (nested / "nested.tf").write_text("should not appear", encoding="utf-8")
+
+    # When resolving the directory
+    text = resolve_directory(str(tmp_path))
+
+    # Then only the immediate file is included, per the documented "immediate files only" scope
+    assert "top.tf" in text
+    assert "nested.tf" not in text
+
+
+def test_resolve_directory_exits_when_no_readable_files(tmp_path):
+    # Given an empty directory
+    # When resolving it
+    # Then it exits with a clear message instead of writing an empty blob
+    with pytest.raises(SystemExit, match="No files found"):
+        resolve_directory(str(tmp_path))
+
+
+def test_main_prints_output_path_and_kind_as_json(tmp_path, monkeypatch, capsys):
+    # Given a diff file and CLI-style arguments
+    diff_file = tmp_path / "changes.diff"
+    diff_file.write_text("--- a/x\n+++ b/x\n", encoding="utf-8")
+    output_file = tmp_path / "out.txt"
+    monkeypatch.setattr(sys, "argv", ["resolve_source.py", str(diff_file), "-o", str(output_file)])
+
+    # When running main()
+    resolve_source.main()
+
+    # Then it prints one JSON line the orchestrating skill can parse for `kind`,
+    # without needing to open the resolved source file itself
+    payload = json.loads(capsys.readouterr().out)
+    assert payload == {"output_path": str(output_file), "kind": "diff"}

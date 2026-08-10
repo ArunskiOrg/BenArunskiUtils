@@ -2,7 +2,7 @@
 
 ## Scope
 
-This repo holds public Claude Code skills and small standalone utilities. A skill lives at `skills/<name>/` with a `SKILL.md`, a `README.md`, and any `reference/`, `agents/`, `scripts/`, or `resources/` it needs. Keep new skills self-contained: cross-skill dependencies should be named explicitly in the dependent skill's `SKILL.md` and `README.md` (see `code-narrator`'s dependency on `tts` for the pattern).
+This repo holds public Claude Code skills and small standalone utilities. A skill lives at `skills/<name>/` with a `SKILL.md`, a `README.md`, and any `reference/`, `agents/`, `scripts/`, or `resources/` it needs. Keep new skills self-contained: cross-skill dependencies should be named explicitly in the dependent skill's `SKILL.md` and `README.md` (see `explain-yourself`'s dependency on `tts` for the pattern).
 
 ## Adding a TTS engine to `tts`
 

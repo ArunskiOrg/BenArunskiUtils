@@ -1,5 +1,5 @@
 [tool.pytest.ini_options]
-pythonpath = ["skills/tts/scripts", "skills/tts/resources", "skills/code-narrator/scripts"]
+pythonpath = ["skills/tts/scripts", "skills/tts/resources", "skills/explain-yourself/scripts"]
 testpaths = ["tests"]
 
 [tool.ruff]

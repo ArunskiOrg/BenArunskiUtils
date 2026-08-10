@@ -1,0 +1,18 @@
+# Python
+__pycache__/
+*.pyc
+.venv/
+.pytest_cache/
+.ruff_cache/
+
+# Skill scratch output (never committed; each skill resolves its own OS temp dir)
+temp/
+
+# Per-install bootstrap state (which TTS engine was verified on this machine)
+.bootstrap-verified
+
+# Editors / OS
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/

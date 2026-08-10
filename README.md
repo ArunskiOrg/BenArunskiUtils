@@ -5,7 +5,7 @@ Public Claude Code skills and standalone utilities. First up: a skill that turns
 ## What's here
 
 - [`tts`](skills/tts/) — turns a document into an MP3. Rewrites it into speech-friendly prose first (TTS engines mangle code, symbols, tables, and markdown), then renders with `edge-tts`.
-- [`explain-yourself`](skills/explain-yourself/) — explains a code file, directory, pull request, commit, or diff, matching the explanation to what it's explaining: a file-by-file walkthrough for a PR or diff, a top-down structure-then-details walkthrough for a file or directory. Speaking the result aloud, via `tts`, is optional.
+- [`explain-yourself`](skills/explain-yourself/) — explains a code file, directory, pull request, commit, or diff, matching the explanation to what it's explaining: a file-by-file walkthrough for a PR or diff, a top-down structure-then-details walkthrough for a file or directory. With `tts` installed alongside it, the explanation is spoken aloud by default; without it, text only.
 
 ## 30-second install
 

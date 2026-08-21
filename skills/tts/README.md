@@ -4,28 +4,11 @@ Turns a document into spoken-word MP3 audio. The useful part isn't the MP3 rende
 
 ## Install as a Claude Code skill
 
-Copy or symlink this folder into your skills directory so it's discoverable. Either a user-level or a project-level location works; see the [Claude Code skills docs](https://code.claude.com/docs/en/skills) for the current discovery rules.
-
-bash / zsh (macOS, Linux, Git Bash):
-
-```bash
-cp -r skills/tts ~/.claude/skills/tts             # user-level
-cp -r skills/tts <project>/.claude/skills/tts     # project-level
+```
+npx skills add ArunskiOrg/BenArunskiUtils --skill tts -g
 ```
 
-PowerShell:
-
-```powershell
-Copy-Item -Recurse skills/tts "$HOME/.claude/skills/tts"
-# or symlink instead of copy:
-New-Item -ItemType SymbolicLink -Path "$HOME/.claude/skills/tts" -Target (Resolve-Path skills/tts)
-```
-
-Command Prompt:
-
-```bat
-xcopy /E /I skills\tts "%USERPROFILE%\.claude\skills\tts"
-```
+`-g` installs at the user level; drop it for the current project instead. See the [root README](../../README.md#30-second-install) for the other options, and the [Claude Code skills docs](https://code.claude.com/docs/en/skills) for where each scope puts the files.
 
 Then ask Claude to convert a document to audio, or say "read this aloud" / mention "text to speech." The first run walks you through `resources/bootstrap.py` to pick and verify a TTS engine (see below); later runs skip straight to converting.
 

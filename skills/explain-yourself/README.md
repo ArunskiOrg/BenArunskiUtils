@@ -6,11 +6,11 @@ Turns a code file, directory, pull request, commit, or diff into an explanation 
 
 Install `tts` alongside it unless you want text-only output; when `tts` is present, explanations are spoken by default, so `--all` (both skills) is the usual choice:
 
-```
+```bash
 npx skills add ArunskiOrg/BenArunskiUtils --all -g
 ```
 
-`-g` installs at the user level; drop it for the current project instead. For this skill alone, `--skill explain-yourself` in place of `--all`. See the [root README](../../README.md#30-second-install) for the other options.
+`-g` installs at the user level; drop it for the current project instead. For this skill alone, `--skill explain-yourself` in place of `--all`. See the [root README](https://github.com/ArunskiOrg/BenArunskiUtils#30-second-install) for the other options.
 
 Then ask Claude to explain a PR, commit, diff, file, or directory: "explain PR 482 to me," "walk me through this directory, I'm new to Terraform," "read this diff to me." You'll be asked where the MP3 should go. Say "text only" (or "just write it") to skip the audio.
 

@@ -11,9 +11,9 @@ Public Claude Code skills and standalone utilities. First up: a skill that turns
 
 Both skills, at the user level, with the [`skills`](https://github.com/vercel-labs/skills) CLI:
 
-```
+```bash
 npx skills add ArunskiOrg/BenArunskiUtils --all -g
-uv tool install edge-tts   # or: pipx install edge-tts / pip install edge-tts
+uv tool install edge-tts   # for tts only; or: pipx install edge-tts / pip install edge-tts
 ```
 
 `--all` takes both skills and installs them for every coding agent the CLI detects; `-g` puts them in your user-level skills directory. Variations, same command otherwise:
@@ -25,7 +25,7 @@ uv tool install edge-tts   # or: pipx install edge-tts / pip install edge-tts
 
 `edge-tts` is the default TTS engine `tts` renders with; it isn't needed for `explain-yourself` on its own. `tts`'s first run verifies the engine and records your choice, and other engines are available — see [`skills/tts/README.md`](skills/tts/README.md).
 
-Then ask Claude to read a document aloud, or explain a PR/commit/diff/file/directory.
+Then ask Claude to read a document aloud, or explain a PR/commit/diff/file/directory. Each skill's own README covers its full requirements — see [`skills/tts/README.md`](skills/tts/README.md) and [`skills/explain-yourself/README.md`](skills/explain-yourself/README.md).
 
 ## Layout
 
@@ -43,6 +43,8 @@ tests/                       — pytest, covering the scripts/ and resources/ ac
 A future skill or utility adds a sibling under `skills/` (or a new top-level folder for something that isn't a skill) without touching this structure.
 
 ## Development
+
+`python3` is the interpreter name on macOS and Linux; on Windows use `python` or `py -3`, since `python3` there often resolves to a Microsoft Store stub that does nothing.
 
 bash / zsh:
 

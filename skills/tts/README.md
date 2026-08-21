@@ -4,11 +4,11 @@ Turns a document into spoken-word MP3 audio. The useful part isn't the MP3 rende
 
 ## Install as a Claude Code skill
 
-```
+```bash
 npx skills add ArunskiOrg/BenArunskiUtils --skill tts -g
 ```
 
-`-g` installs at the user level; drop it for the current project instead. See the [root README](../../README.md#30-second-install) for the other options, and the [Claude Code skills docs](https://code.claude.com/docs/en/skills) for where each scope puts the files.
+`-g` installs at the user level; drop it for the current project instead. See the [root README](https://github.com/ArunskiOrg/BenArunskiUtils#30-second-install) for the other options, and the [Claude Code skills docs](https://code.claude.com/docs/en/skills) for where each scope puts the files.
 
 Then ask Claude to convert a document to audio, or say "read this aloud" / mention "text to speech." The first run walks you through `resources/bootstrap.py` to pick and verify a TTS engine (see below); later runs skip straight to converting.
 

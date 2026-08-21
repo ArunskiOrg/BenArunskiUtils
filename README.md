@@ -1,6 +1,6 @@
 # BenArunskiUtils
 
-Public Claude Code skills and standalone utilities. First up: a skill that turns a document into spoken-word audio, and one that explains code the way you'd want it explained. More skills and utilities will land here over time under the same layout.
+Public Claude Code skills. First up: a skill that turns a document into spoken-word audio, and one that explains code the way you'd want it explained. More skills and utilities will land here over time under the same layout.
 
 ## What's here
 
@@ -52,7 +52,7 @@ skills/<name>/SKILL.md       — the skill definition Claude Code loads
 skills/<name>/README.md      — what it does, both install paths, requirements
 skills/<name>/reference/     — rule docs a skill's agents read (tts only)
 skills/<name>/agents/        — prompts for agents a skill spawns
-skills/<name>/scripts/       — standalone Python; no Claude Code required
+skills/<name>/scripts/       — Python the skill and its agents shell out to
 skills/<name>/resources/     — one-time setup: prerequisite checks, engine/credential
                                 selection (tts only; see skills/tts/resources/bootstrap.py)
 tests/                       — pytest, covering the scripts/ and resources/ across all skills

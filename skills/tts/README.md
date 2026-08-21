@@ -29,30 +29,9 @@ xcopy /E /I skills\tts "%USERPROFILE%\.claude\skills\tts"
 
 Then ask Claude to convert a document to audio, or say "read this aloud" / mention "text to speech." The first run walks you through `resources/bootstrap.py` to pick and verify a TTS engine (see below); later runs skip straight to converting.
 
-## Standalone use (no Claude Code)
-
-The rewrite passes are prompt-driven — `reference/preprocessing-rules-1.md` and `reference/preprocessing-rules-2.md` are the full instructions. Feed a document and each rules file to any capable LLM chat in turn (structure pass, then token-level sweep) and save its output.
-
-Once you have a speech-ready `.txt` file, render it with the standalone script — no LLM needed for this step:
-
-```bash
-python3 scripts/render.py mydoc.txt -o mydoc.mp3
-python3 scripts/render.py --list-voices
-```
-
-On Windows, substitute `python` (or `py -3`) for `python3` in this and every other command below.
-
-`scripts/split_text.py` and `scripts/glue_text.py` help an LLM chunk and reassemble a document that's too long for one reply; see their `--help`.
-
 ## Requirements and choosing a TTS engine
 
-Python 3.9+ to run the scripts in this folder, plus a verified TTS engine. `resources/bootstrap.py` checks prerequisites and helps pick one — free or paid:
-
-```bash
-python3 resources/bootstrap.py --list             # engines, availability, install commands (JSON)
-python3 resources/bootstrap.py --check edge-tts    # verify one engine is ready
-python3 resources/bootstrap.py --mark-verified edge-tts  # record your choice so future runs skip this step
-```
+Python 3.9+ to run the scripts in this folder, plus a verified TTS engine. The skill's first run walks through `resources/bootstrap.py`, which checks prerequisites and helps pick an engine — free or paid.
 
 Free, local: `edge-tts` (default; cross-platform CLI, no account) and `macos-say` (built in on macOS). Paid, API-key based: `elevenlabs`, `openai-tts`, `azure-speech` — bootstrap verifies the relevant environment variable is set, but doesn't hand you sign-up steps itself; ask Claude (or check the provider's site) for current instructions, since those change over time and this repo won't keep stale copies of them.
 

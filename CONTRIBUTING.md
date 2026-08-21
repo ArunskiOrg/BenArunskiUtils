@@ -2,7 +2,7 @@
 
 ## Scope
 
-This repo holds public Claude Code skills and small standalone utilities. A skill lives at `skills/<name>/` with a `SKILL.md`, a `README.md`, and any `reference/`, `agents/`, `scripts/`, or `resources/` it needs. Keep new skills self-contained: cross-skill dependencies should be named explicitly in the dependent skill's `SKILL.md` and `README.md` (see `explain-yourself`'s dependency on `tts` for the pattern).
+This repo holds public Claude Code skills. A skill lives at `skills/<name>/` with a `SKILL.md`, a `README.md`, and any `reference/`, `agents/`, `scripts/`, or `resources/` it needs. Keep new skills self-contained: cross-skill dependencies should be named explicitly in the dependent skill's `SKILL.md` and `README.md` (see `explain-yourself`'s dependency on `tts` for the pattern).
 
 ## Adding a TTS engine to `tts`
 
@@ -11,7 +11,7 @@ This repo holds public Claude Code skills and small standalone utilities. A skil
 ## Ground rules
 
 - No machine-specific paths, usernames, or environment assumptions. A skill must work for someone who has never seen this repo before, on macOS, Linux, or Windows.
-- Prefer Python for anything beyond a one-line command; keep it in `scripts/` so it's usable standalone, without Claude Code.
+- Prefer Python for anything beyond a one-line command; keep it in `scripts/`, invoked by the skill or its agents, so it's testable on its own.
 - Python 3.9+, no third-party dependencies in `scripts/` beyond what a skill's `README.md` documents as a requirement (e.g. `edge-tts`).
 - A script that depends on an external tool checks for it up front and fails with install instructions, not partway through.
 - New `.py` files carry a `# SPDX-License-Identifier: MIT` line after the shebang (or as line 1 if there is none).
@@ -26,7 +26,7 @@ python3 -m venv .venv && .venv/bin/pip install pytest ruff
 
 (Windows: `.venv\Scripts\pip`, etc.) Both run in CI on every PR; a red check blocks merge.
 
-If you're changing a skill's behavior, re-run it end to end (via Claude Code or the standalone path) and describe what you verified in the PR description — not just that tests pass.
+If you're changing a skill's behavior, re-run it end to end in Claude Code and describe what you verified in the PR description — not just that tests pass.
 
 ## Tests
 

@@ -2,8 +2,7 @@
 # SPDX-License-Identifier: MIT
 """Render a speech-ready text file to MP3 with a neural TTS engine.
 
-Standalone: works with or without Claude Code. Checks that the engine's CLI is
-installed before rendering and fails with install instructions instead of
+Checks that the engine's CLI is installed before rendering and fails with install instructions instead of
 partway through a multi-minute render. Only edge-tts is wired up so far;
 resources/bootstrap.py tracks other engines' prerequisites but rendering
 through them isn't implemented here yet — see CONTRIBUTING.md.

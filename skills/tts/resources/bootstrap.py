@@ -2,8 +2,7 @@
 # SPDX-License-Identifier: MIT
 """Check tts prerequisites and help pick a neural TTS engine.
 
-Standalone: works with or without Claude Code. The skill's SKILL.md calls
-this once, to let a user pick and verify an engine, then stops calling it —
+The skill's SKILL.md calls this once, to let a user pick and verify an engine, then stops calling it —
 see --verified below and SKILL.md's bootstrap step.
 
 Usage:

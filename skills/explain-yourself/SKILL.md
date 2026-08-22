@@ -57,4 +57,3 @@ Path variables used below:
 
 - The explanation can use headings (one per file) and backticked code or identifiers; it isn't "prose only" the way a `tts`-direct source has to be. `tts`'s own rules already convert headings and identifiers for speech when the explanation gets rendered to audio.
 - Nothing is cached. Re-running re-resolves the source, which is what you want for a pull request that has moved since the last run.
-- `scripts/resolve_source.py` also works standalone, outside Claude Code, see the per-skill README.

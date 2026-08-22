@@ -9,41 +9,23 @@ Public Claude Code skills and standalone utilities. First up: a skill that turns
 
 ## 30-second install
 
-As Claude Code skills.
-
-bash / zsh (macOS, Linux, Git Bash):
+Both skills, at the user level, with the [`skills`](https://github.com/vercel-labs/skills) CLI:
 
 ```bash
-git clone https://github.com/ArunskiOrg/BenArunskiUtils
-cp -r BenArunskiUtils/skills/tts BenArunskiUtils/skills/explain-yourself ~/.claude/skills/
-uv tool install edge-tts   # or: pipx install edge-tts / pip install edge-tts
+npx skills add ArunskiOrg/BenArunskiUtils --all -g
+uv tool install edge-tts   # for tts only; or: pipx install edge-tts / pip install edge-tts
 ```
 
-PowerShell (Windows, or PowerShell 7 on macOS/Linux):
+`--all` takes both skills and installs them for every coding agent the CLI detects; `-g` puts them in your user-level skills directory. Variations, same command otherwise:
 
-```powershell
-git clone https://github.com/ArunskiOrg/BenArunskiUtils
-Copy-Item -Recurse BenArunskiUtils/skills/tts, BenArunskiUtils/skills/explain-yourself "$HOME/.claude/skills/"
-uv tool install edge-tts   # or: pipx install edge-tts / pip install edge-tts
-```
+- drop `-g` to install into the current project's agent directory instead
+- `--skill tts` (or `--skill explain-yourself`) for just one of them
+- `--copy` to copy the files rather than symlink them
+- `-l` to list what's in the repo without installing anything
 
-Command Prompt (Windows):
+`edge-tts` is the default TTS engine `tts` renders with; it isn't needed for `explain-yourself` on its own. `tts`'s first run verifies the engine and records your choice, and other engines are available — see [`skills/tts/README.md`](skills/tts/README.md).
 
-```bat
-git clone https://github.com/ArunskiOrg/BenArunskiUtils
-xcopy /E /I BenArunskiUtils\skills\tts "%USERPROFILE%\.claude\skills\tts"
-xcopy /E /I BenArunskiUtils\skills\explain-yourself "%USERPROFILE%\.claude\skills\explain-yourself"
-uv tool install edge-tts
-```
-
-Then ask Claude to read a document aloud, or explain a PR/commit/diff/file/directory. Each skill's own README covers standalone use (no Claude Code) and full requirements — see [`skills/tts/README.md`](skills/tts/README.md) and [`skills/explain-yourself/README.md`](skills/explain-yourself/README.md).
-
-## Shell conventions in these docs
-
-Commands are written for bash/zsh unless a PowerShell or Command Prompt variant is shown. Two portability notes that apply everywhere:
-
-- `python3` is the interpreter name on macOS and Linux. On Windows use `python` or `py -3`; `python3` there often resolves to a Microsoft Store stub that does nothing.
-- Forward slashes work in paths for every shell listed here, including PowerShell. Only Command Prompt examples use backslashes.
+Then ask Claude to read a document aloud, or explain a PR/commit/diff/file/directory. Each skill's own README covers its full requirements — see [`skills/tts/README.md`](skills/tts/README.md) and [`skills/explain-yourself/README.md`](skills/explain-yourself/README.md).
 
 ## Layout
 
@@ -61,6 +43,8 @@ tests/                       — pytest, covering the scripts/ and resources/ ac
 A future skill or utility adds a sibling under `skills/` (or a new top-level folder for something that isn't a skill) without touching this structure.
 
 ## Development
+
+`python3` is the interpreter name on macOS and Linux; on Windows use `python` or `py -3`, since `python3` there often resolves to a Microsoft Store stub that does nothing.
 
 bash / zsh:
 

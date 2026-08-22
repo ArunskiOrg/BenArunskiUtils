@@ -4,28 +4,13 @@ Turns a code file, directory, pull request, commit, or diff into an explanation 
 
 ## Install as a Claude Code skill
 
-Copy or symlink this folder into your skills directory. Install `tts` alongside it unless you want text-only output; when `tts` is present, explanations are spoken by default.
-
-bash / zsh (macOS, Linux, Git Bash):
+Install `tts` alongside it unless you want text-only output; when `tts` is present, explanations are spoken by default, so `--all` (both skills) is the usual choice:
 
 ```bash
-cp -r skills/explain-yourself ~/.claude/skills/explain-yourself
-cp -r skills/tts ~/.claude/skills/tts
+npx skills add ArunskiOrg/BenArunskiUtils --all -g
 ```
 
-PowerShell:
-
-```powershell
-Copy-Item -Recurse skills/explain-yourself "$HOME/.claude/skills/explain-yourself"
-Copy-Item -Recurse skills/tts "$HOME/.claude/skills/tts"
-```
-
-Command Prompt:
-
-```bat
-xcopy /E /I skills\explain-yourself "%USERPROFILE%\.claude\skills\explain-yourself"
-xcopy /E /I skills\tts "%USERPROFILE%\.claude\skills\tts"
-```
+`-g` installs at the user level; drop it for the current project instead. For this skill alone, `--skill explain-yourself` in place of `--all`. See the [root README](https://github.com/ArunskiOrg/BenArunskiUtils#30-second-install) for the other options.
 
 Then ask Claude to explain a PR, commit, diff, file, or directory: "explain PR 482 to me," "walk me through this directory, I'm new to Terraform," "read this diff to me." You'll be asked where the MP3 should go. Say "text only" (or "just write it") to skip the audio.
 

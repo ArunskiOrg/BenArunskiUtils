@@ -21,7 +21,9 @@ in the document, so a hostile SKILL.md would execute code during validation.
 import argparse
 import re
 import sys
+from collections.abc import Sequence
 from pathlib import Path
+from typing import Optional
 
 import yaml
 
@@ -55,7 +57,7 @@ def parse_frontmatter(text: str) -> dict:
     return parsed
 
 
-def check_name(value) -> list:
+def check_name(value: object) -> list[str]:
     if value is None:
         return ["'name' is missing"]
     if not isinstance(value, str):
@@ -73,7 +75,7 @@ def check_name(value) -> list:
     return problems
 
 
-def check_description(value) -> list:
+def check_description(value: object) -> list[str]:
     if value is None:
         return ["'description' is missing"]
     if not isinstance(value, str):
@@ -91,12 +93,12 @@ def check_description(value) -> list:
     return problems
 
 
-def validate_frontmatter(frontmatter: dict) -> list:
+def validate_frontmatter(frontmatter: dict) -> list[str]:
     """Return every constraint violation in a parsed frontmatter mapping."""
     return check_name(frontmatter.get("name")) + check_description(frontmatter.get("description"))
 
 
-def validate_file(path: Path) -> list:
+def validate_file(path: Path) -> list[str]:
     """Return every problem in one SKILL.md, including parse failures."""
     try:
         text = path.read_text(encoding="utf-8")
@@ -109,11 +111,11 @@ def validate_file(path: Path) -> list:
     return validate_frontmatter(frontmatter)
 
 
-def find_skill_files(root: Path) -> list:
+def find_skill_files(root: Path) -> list[Path]:
     return sorted(root.glob("skills/*/SKILL.md"))
 
 
-def main(argv=None) -> int:
+def main(argv: Optional[Sequence[str]] = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument(
         "root",

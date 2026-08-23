@@ -42,7 +42,7 @@ def test_main_passes_against_the_repository_itself(capsys):
 
 
 def test_bad_fixture_reports_every_violated_rule():
-    # Given a SKILL.md that breaks every name and description constraint at once
+    # Given a SKILL.md that breaks every length, charset, reserved-word, and XML-tag constraint at once
     problems = validator.validate_file(BAD_FIXTURE)
     joined = " | ".join(problems)
 

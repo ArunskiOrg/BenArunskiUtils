@@ -37,6 +37,37 @@ Inside Claude Code, the same two skills install as plugins from this repo's own 
 
 Then ask Claude to read a document aloud, or explain a PR/commit/diff/file/directory. Each skill's own README covers its full requirements — see [`skills/tts/README.md`](skills/tts/README.md) and [`skills/explain-yourself/README.md`](skills/explain-yourself/README.md).
 
+### No Node?
+
+`npx skills add` needs Node, and the `/plugin` route needs Claude Code. Without either, clone this repo and copy the skill folders into your user-level skills directory: `~/.claude/skills/` on macOS and Linux, `%USERPROFILE%\.claude\skills\` on Windows.
+
+bash / zsh:
+
+```bash
+git clone https://github.com/ArunskiOrg/BenArunskiUtils.git
+mkdir -p ~/.claude/skills
+cp -r BenArunskiUtils/skills/tts BenArunskiUtils/skills/explain-yourself ~/.claude/skills/
+```
+
+PowerShell:
+
+```powershell
+git clone https://github.com/ArunskiOrg/BenArunskiUtils.git
+New-Item -ItemType Directory -Force "$env:USERPROFILE/.claude/skills"
+Copy-Item -Recurse BenArunskiUtils/skills/tts, BenArunskiUtils/skills/explain-yourself "$env:USERPROFILE/.claude/skills/"
+```
+
+Command Prompt:
+
+```bat
+git clone https://github.com/ArunskiOrg/BenArunskiUtils.git
+mkdir "%USERPROFILE%\.claude\skills"
+xcopy /E /I BenArunskiUtils\skills\tts "%USERPROFILE%\.claude\skills\tts"
+xcopy /E /I BenArunskiUtils\skills\explain-yourself "%USERPROFILE%\.claude\skills\explain-yourself"
+```
+
+Copy only one folder if you want only one skill. Restart Claude Code afterward so it picks up the new directory. `edge-tts` is still required for `tts`; install it as shown above. To update later, pull in the clone and copy again.
+
 ## Layout
 
 ```

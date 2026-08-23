@@ -34,6 +34,27 @@ If you're changing a skill's behavior, re-run it end to end in Claude Code and d
 - Parametrize when multiple cases share the same action and differ only in input/expected output; give each case a name via `pytest.param(..., id=...)`.
 - Given/When/Then comments in every test body.
 
+## Behavioral evals
+
+`evals/` holds scenarios that test skill routing: whether a phrasing loads the right skill, and whether the phrasings a `description` explicitly excludes stay excluded. `evals/README.md` documents the scenario shape and the manual run procedure. There is no harness; a scenario is one prompt to a fresh session, graded by reading the transcript.
+
+Run the affected skill's scenarios before merging any change that alters:
+
+- a `description` in `skills/*/SKILL.md`, including wording that looks cosmetic. Routing is decided from that string, so a reworded clause is a behavior change.
+- what a skill covers or refuses, whether or not the `description` changed.
+- the relationship between skills, such as `explain-yourself` deferring an already-prose document to `tts`.
+
+Procedure:
+
+1. Start a fresh Claude Code session with the branch's `skills/` installed and no prior turns about the skill.
+2. Run every scenario in `evals/<skill>.json` for each affected skill, twice each, pasting `query` verbatim.
+3. Record pass/fail per scenario against its `expectations`, including the negative-trigger cases. A negative case that now fires the skill is a regression even when the resulting answer is good.
+4. Put the results in the PR description: scenario ids, pass/fail, and what the model did in any failure.
+
+A change that moves a scenario from pass to fail needs either a fix or an explicit note in the PR saying why the new behavior is correct and the scenario is being updated.
+
+Baselines in `evals/*.json` are currently unmeasured. If you run a scenario against a session with the skill uninstalled, record it in `baseline_no_skill` rather than leaving the field for someone else.
+
 ## Commit and PR
 
 Small, focused commits. PR description explains what changed and why, not just what.

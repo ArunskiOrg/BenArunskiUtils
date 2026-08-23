@@ -1,0 +1,73 @@
+{
+  "skill_name": "explain-yourself",
+  "scenarios": [
+    {
+      "id": "ey-01",
+      "query": "Walk me through PR 482.",
+      "files": [],
+      "expect_trigger": true,
+      "expected_behavior": "The explain-yourself skill loads, resolves 482 as a pull request, and gives a file-by-file walkthrough of what changed and why. With tts installed the explanation is spoken; without it, written.",
+      "expectations": [
+        "The explain-yourself skill is invoked without the user having to name it",
+        "The source is resolved as a pull request rather than treated as a file path",
+        "The output is a change walkthrough, not a diff listing"
+      ],
+      "baseline_no_skill": {
+        "measured": false,
+        "result": null,
+        "notes": "Not yet run against a fresh no-skill instance."
+      }
+    },
+    {
+      "id": "ey-02",
+      "query": "Explain skills/tts/scripts/render.py to me. I'm a novice in Python subprocess handling.",
+      "files": ["skills/tts/scripts/render.py"],
+      "expect_trigger": true,
+      "expected_behavior": "The skill loads, resolves the argument as a code file, and explains top down: structure first, then how the pieces interact, then the details that matter, pitched for the stated novice context and quoting code only where it is needed.",
+      "expectations": [
+        "The explain-yourself skill is invoked",
+        "The explanation starts with structure rather than the first line of the file",
+        "The stated novice context visibly changes the level of the explanation"
+      ],
+      "baseline_no_skill": {
+        "measured": false,
+        "result": null,
+        "notes": "Not yet run against a fresh no-skill instance."
+      }
+    },
+    {
+      "id": "ey-03",
+      "query": "What changed in the last commit on this branch?",
+      "files": [],
+      "expect_trigger": true,
+      "expected_behavior": "The skill loads, resolves the source as a commit, and explains the change file by file with the reasoning behind it.",
+      "expectations": [
+        "The explain-yourself skill is invoked",
+        "The source is resolved as a commit",
+        "Each changed file is covered with why it changed, not only what changed"
+      ],
+      "baseline_no_skill": {
+        "measured": false,
+        "result": null,
+        "notes": "Not yet run against a fresh no-skill instance."
+      }
+    },
+    {
+      "id": "ey-04-negative",
+      "query": "Read me docs/adr/0007-choose-postgres.md, it's a short decision record.",
+      "files": ["docs/adr/0007-choose-postgres.md"],
+      "expect_trigger": false,
+      "expected_behavior": "The source is already prose, not code or a change. explain-yourself declines the source and the request routes to the tts skill instead, per the last line of explain-yourself's description.",
+      "expectations": [
+        "explain-yourself does not produce a code-style walkthrough of an ADR",
+        "The request is handled by tts, or the assistant offers tts, rather than explain-yourself",
+        "No file-by-file change explanation is generated for a document that has no changes"
+      ],
+      "baseline_no_skill": {
+        "measured": false,
+        "result": null,
+        "notes": "Not yet run against a fresh no-skill instance. Without either skill installed the model has nothing to mis-route to, so this scenario only carries information once both skills are present; the baseline is recorded for symmetry."
+      }
+    }
+  ]
+}

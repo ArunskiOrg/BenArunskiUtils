@@ -13,6 +13,8 @@ Turns a code file, directory, pull request, commit, or diff into an explanation 
 - Python 3.9+ to run `scripts/resolve_source.py`.
 - The `tts` skill, installed as a sibling skill, for the default spoken output (see this repo's root README for the install path). Without it this skill still works, text only.
 
+What this skill executes, sends over the network, and writes to disk is disclosed in [README.md, "Permissions and network egress"](README.md#permissions-and-network-egress).
+
 ## Inputs
 
 1. **Source** — one of, resolved in this order:

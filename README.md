@@ -54,16 +54,15 @@ PowerShell:
 ```powershell
 git clone https://github.com/ArunskiOrg/BenArunskiUtils.git
 New-Item -ItemType Directory -Force "$env:USERPROFILE/.claude/skills"
-Copy-Item -Recurse BenArunskiUtils/skills/tts, BenArunskiUtils/skills/explain-yourself "$env:USERPROFILE/.claude/skills/"
+Copy-Item -Recurse -Force BenArunskiUtils/skills/tts, BenArunskiUtils/skills/explain-yourself "$env:USERPROFILE/.claude/skills/"
 ```
 
 Command Prompt:
 
 ```bat
 git clone https://github.com/ArunskiOrg/BenArunskiUtils.git
-mkdir "%USERPROFILE%\.claude\skills"
-xcopy /E /I BenArunskiUtils\skills\tts "%USERPROFILE%\.claude\skills\tts"
-xcopy /E /I BenArunskiUtils\skills\explain-yourself "%USERPROFILE%\.claude\skills\explain-yourself"
+xcopy /E /I /Y BenArunskiUtils\skills\tts "%USERPROFILE%\.claude\skills\tts"
+xcopy /E /I /Y BenArunskiUtils\skills\explain-yourself "%USERPROFILE%\.claude\skills\explain-yourself"
 ```
 
 Copy only one folder if you want only one skill. Restart Claude Code afterward so it picks up the new directory. `edge-tts` is still required for `tts`; install it as shown above. To update later, pull in the clone and copy again.

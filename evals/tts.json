@@ -3,8 +3,9 @@
   "scenarios": [
     {
       "id": "tts-01",
-      "query": "Convert docs/architecture.md into an MP3 I can listen to on my commute.",
-      "files": ["docs/architecture.md"],
+      "query": "Convert evals/fixtures/docs/architecture.md into an MP3 I can listen to on my commute.",
+      "setup": "A checkout of this repo at the branch under test, with its skills/ installed.",
+      "files": ["evals/fixtures/docs/architecture.md"],
       "expect_trigger": true,
       "expected_behavior": "The tts skill loads. The assistant rewrites the markdown into speech-friendly prose before rendering, then produces an MP3 with a neural TTS engine and reports the output path.",
       "expectations": [
@@ -15,13 +16,14 @@
       "baseline_no_skill": {
         "measured": false,
         "result": null,
-        "notes": "Not yet run against a fresh no-skill instance."
+        "notes": "Measurement is tracked separately; see evals/README.md."
       }
     },
     {
       "id": "tts-02",
-      "query": "Read RELEASE-NOTES.md aloud for me.",
-      "files": ["RELEASE-NOTES.md"],
+      "query": "Read evals/fixtures/RELEASE-NOTES.md aloud for me.",
+      "setup": "A checkout of this repo at the branch under test, with its skills/ installed.",
+      "files": ["evals/fixtures/RELEASE-NOTES.md"],
       "expect_trigger": true,
       "expected_behavior": "The tts skill loads on the \"read aloud\" phrasing and produces an MP3 of the rewritten notes.",
       "expectations": [
@@ -32,30 +34,32 @@
       "baseline_no_skill": {
         "measured": false,
         "result": null,
-        "notes": "Not yet run against a fresh no-skill instance."
+        "notes": "Measurement is tracked separately; see evals/README.md."
       }
     },
     {
       "id": "tts-03",
-      "query": "Can you TTS the onboarding guide at docs/onboarding.md?",
-      "files": ["docs/onboarding.md"],
+      "query": "Can you TTS the onboarding guide at evals/fixtures/docs/onboarding.md?",
+      "setup": "A checkout of this repo at the branch under test, with its skills/ installed, in a session where tts has not previously bootstrapped.",
+      "files": ["evals/fixtures/docs/onboarding.md"],
       "expect_trigger": true,
       "expected_behavior": "The explicit \"TTS\" mention routes to the tts skill, which checks its bootstrap state before rendering and produces an MP3.",
       "expectations": [
         "The tts skill is invoked",
-        "Engine availability is checked before rendering is attempted",
+        "The transcript shows an engine check before the first render command: a read of the bootstrap state file, a lookup or version call on the engine binary, or an explicit statement that the engine is already verified",
         "An .mp3 file path is reported as the output"
       ],
       "baseline_no_skill": {
         "measured": false,
         "result": null,
-        "notes": "Not yet run against a fresh no-skill instance."
+        "notes": "Measurement is tracked separately; see evals/README.md."
       }
     },
     {
       "id": "tts-04-negative",
-      "query": "Tell me what's in requirements.txt.",
-      "files": ["requirements.txt"],
+      "query": "Tell me what's in evals/fixtures/requirements.txt.",
+      "setup": "A checkout of this repo at the branch under test, with its skills/ installed.",
+      "files": ["evals/fixtures/requirements.txt"],
       "expect_trigger": false,
       "expected_behavior": "A bare \"tell me\" idiom asks for a visual reply. The assistant answers in text. If it raises audio at all, it does so only as the short offer the description specifies (\"btw, do you want mp3 output?\") and does not render anything unless the user confirms.",
       "expectations": [
@@ -66,7 +70,7 @@
       "baseline_no_skill": {
         "measured": false,
         "result": null,
-        "notes": "Not yet run against a fresh no-skill instance. A no-skill instance is expected to pass this scenario trivially, which is exactly why the baseline matters: a passing score here credits the skill only if the no-skill run is also recorded."
+        "notes": "Measurement is tracked separately. A no-skill instance is expected to pass this scenario trivially, which is why the baseline matters: a passing score here credits the skill only once the no-skill run is recorded."
       }
     }
   ]

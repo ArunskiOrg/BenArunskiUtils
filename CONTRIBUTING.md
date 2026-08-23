@@ -36,7 +36,7 @@ If you're changing a skill's behavior, re-run it end to end in Claude Code and d
 
 ## Behavioral evals
 
-`evals/` holds scenarios that test skill routing: whether a phrasing loads the right skill, and whether the phrasings a `description` explicitly excludes stay excluded. `evals/README.md` documents the scenario shape and the manual run procedure. There is no harness; a scenario is one prompt to a fresh session, graded by reading the transcript.
+`evals/` holds scenarios that test skill routing: whether a phrasing loads the right skill, and whether the phrasings a `description` explicitly excludes stay excluded.
 
 Run the affected skill's scenarios before merging any change that alters:
 
@@ -44,16 +44,11 @@ Run the affected skill's scenarios before merging any change that alters:
 - what a skill covers or refuses, whether or not the `description` changed.
 - the relationship between skills, such as `explain-yourself` deferring an already-prose document to `tts`.
 
-Procedure:
+[`evals/README.md`](evals/README.md) has the scenario shape, the run procedure, the 2/2 pass rule, and the current baseline status. Follow it rather than improvising a run.
 
-1. Start a fresh Claude Code session with the branch's `skills/` installed and no prior turns about the skill.
-2. Run every scenario in `evals/<skill>.json` for each affected skill, twice each, pasting `query` verbatim.
-3. Record pass/fail per scenario against its `expectations`, including the negative-trigger cases. A negative case that now fires the skill is a regression even when the resulting answer is good.
-4. Put the results in the PR description: scenario ids, pass/fail, and what the model did in any failure.
+The merge gate: every scenario for each affected skill has been run, both runs are reported in the PR description, and no scenario fails. That includes the negative-trigger cases; a negative case that now fires the skill is a regression even when the resulting answer is good. A change that moves a scenario from pass to fail needs either a fix or an explicit note in the PR saying why the new behavior is correct and the scenario is being updated.
 
-A change that moves a scenario from pass to fail needs either a fix or an explicit note in the PR saying why the new behavior is correct and the scenario is being updated.
-
-Baselines in `evals/*.json` are currently unmeasured. If you run a scenario against a session with the skill uninstalled, record it in `baseline_no_skill` rather than leaving the field for someone else.
+`tests/test_evals.py` validates the scenario files themselves and runs in CI, so a malformed or incomplete scenario fails the build. It checks structure, not behavior; it is no substitute for running the suite.
 
 ## Commit and PR
 

@@ -3,10 +3,11 @@
   "scenarios": [
     {
       "id": "ey-01",
-      "query": "Walk me through PR 482.",
+      "query": "Walk me through PR 6.",
+      "setup": "A checkout of this repo at the branch under test, with its skills/ installed and gh authenticated. PR 6 is merged and readable, so the scenario resolves the same way for every runner.",
       "files": [],
       "expect_trigger": true,
-      "expected_behavior": "The explain-yourself skill loads, resolves 482 as a pull request, and gives a file-by-file walkthrough of what changed and why. With tts installed the explanation is spoken; without it, written.",
+      "expected_behavior": "The explain-yourself skill loads, resolves 6 as a pull request against this repo, and gives a file-by-file walkthrough of what changed and why. With tts installed the explanation is spoken; without it, written.",
       "expectations": [
         "The explain-yourself skill is invoked without the user having to name it",
         "The source is resolved as a pull request rather than treated as a file path",
@@ -15,13 +16,14 @@
       "baseline_no_skill": {
         "measured": false,
         "result": null,
-        "notes": "Not yet run against a fresh no-skill instance."
+        "notes": "Measurement is tracked separately; see evals/README.md."
       }
     },
     {
       "id": "ey-02",
-      "query": "Explain skills/tts/scripts/render.py to me. I'm a novice in Python subprocess handling.",
-      "files": ["skills/tts/scripts/render.py"],
+      "query": "Explain evals/fixtures/src/render_media.py to me. I'm a novice in Python subprocess handling.",
+      "setup": "A checkout of this repo at the branch under test, with its skills/ installed.",
+      "files": ["evals/fixtures/src/render_media.py"],
       "expect_trigger": true,
       "expected_behavior": "The skill loads, resolves the argument as a code file, and explains top down: structure first, then how the pieces interact, then the details that matter, pitched for the stated novice context and quoting code only where it is needed.",
       "expectations": [
@@ -32,12 +34,13 @@
       "baseline_no_skill": {
         "measured": false,
         "result": null,
-        "notes": "Not yet run against a fresh no-skill instance."
+        "notes": "Measurement is tracked separately; see evals/README.md."
       }
     },
     {
       "id": "ey-03",
       "query": "What changed in the last commit on this branch?",
+      "setup": "A checkout of this repo at the branch under test, with its skills/ installed. The branch has at least one commit of its own, so the resolved commit is the same for every runner.",
       "files": [],
       "expect_trigger": true,
       "expected_behavior": "The skill loads, resolves the source as a commit, and explains the change file by file with the reasoning behind it.",
@@ -49,24 +52,25 @@
       "baseline_no_skill": {
         "measured": false,
         "result": null,
-        "notes": "Not yet run against a fresh no-skill instance."
+        "notes": "Measurement is tracked separately; see evals/README.md."
       }
     },
     {
       "id": "ey-04-negative",
-      "query": "Read me docs/adr/0007-choose-postgres.md, it's a short decision record.",
-      "files": ["docs/adr/0007-choose-postgres.md"],
+      "query": "Read me evals/fixtures/docs/adr/0007-choose-postgres.md, it's a short decision record.",
+      "setup": "A checkout of this repo at the branch under test, with both skills/ installed, since the scenario tests where the request lands when tts is also available.",
+      "files": ["evals/fixtures/docs/adr/0007-choose-postgres.md"],
       "expect_trigger": false,
       "expected_behavior": "The source is already prose, not code or a change. explain-yourself declines the source and the request routes to the tts skill instead, per the last line of explain-yourself's description.",
       "expectations": [
         "explain-yourself does not produce a code-style walkthrough of an ADR",
-        "The request is handled by tts, or the assistant offers tts, rather than explain-yourself",
-        "No file-by-file change explanation is generated for a document that has no changes"
+        "No file-by-file change explanation is generated for a document that has no changes",
+        "The response either renders the ADR through tts or offers mp3 output, and the run record names which of those two happened"
       ],
       "baseline_no_skill": {
         "measured": false,
         "result": null,
-        "notes": "Not yet run against a fresh no-skill instance. Without either skill installed the model has nothing to mis-route to, so this scenario only carries information once both skills are present; the baseline is recorded for symmetry."
+        "notes": "Measurement is tracked separately. Without either skill installed the model has nothing to mis-route to, so this scenario only carries information once both skills are present; the baseline is recorded for symmetry."
       }
     }
   ]

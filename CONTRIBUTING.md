@@ -50,6 +50,8 @@ The merge gate: every scenario for each affected skill has been run, both runs a
 
 `tests/test_evals.py` validates the scenario files themselves and runs in CI, so a malformed or incomplete scenario fails the build. It checks structure, not behavior; it is no substitute for running the suite.
 
+Adding a skill therefore means adding `evals/<name>.json` alongside it: CI fails a `skills/<name>/` directory that has no matching eval file. Each file needs at least three scenarios, at least one of them a negative case whose `id` ends in `-negative`, every path in a scenario's `files` committed under `evals/fixtures/`, and a `baseline_no_skill` slot per scenario that stays `"measured": false` until a run backs it.
+
 ## Commit and PR
 
 Small, focused commits. PR description explains what changed and why, not just what.

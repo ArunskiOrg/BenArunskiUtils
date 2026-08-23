@@ -37,11 +37,13 @@ Every path a `query` names resolves inside a checkout of this repo. That is the 
 
 `fixtures/src/render_media.py` is a standalone subprocess wrapper written for `ey-02`. It is not imported by anything and is not part of either skill.
 
+Every fixture is invented for these scenarios and describes nothing real. That includes `fixtures/docs/adr/0007-choose-postgres.md`, which sits at a conventional ADR path but records no decision this project made. Do not cite any of them as documentation.
+
 ## Running the suite
 
 There is no harness. Each scenario is one prompt to a fresh Claude Code session, graded by reading the transcript against the scenario's `expectations`.
 
-1. Check out the branch under test and install its `skills/`.
+1. Check out the branch under test, then install the skills from that checkout rather than from the published default branch, since `npx skills add ArunskiOrg/BenArunskiUtils` would fetch `main` and not the branch you are testing. Copy them in: `cp -r skills/tts skills/explain-yourself ~/.claude/skills/` on macOS and Linux, or `Copy-Item -Recurse -Force skills/tts, skills/explain-yourself "$env:USERPROFILE/.claude/skills/"` on Windows. For the no-skill half of a baseline run, remove both folders from that directory first.
 2. Start a session in that checkout. Fresh means a new session with no prior turns: a session that has already discussed the skill will trigger it for reasons the eval is not measuring.
 3. Satisfy the scenario's `setup`.
 4. Paste `query` verbatim. Do not name the skill and do not rephrase.

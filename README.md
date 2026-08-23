@@ -40,7 +40,7 @@ skills/<name>/scripts/       — Python the skill and its agents shell out to
 skills/<name>/resources/     — one-time setup: prerequisite checks, engine/credential
                                 selection (tts only; see skills/tts/resources/bootstrap.py)
 evals/                       — behavioral scenarios testing which skill a phrasing routes to
-tests/                       — pytest, covering the scripts/ and resources/ across all skills
+tests/                       — pytest, covering the scripts/ and resources/ across all skills, and the eval files in evals/
 ```
 
 A future skill or utility adds a sibling under `skills/` (or a new top-level folder for something that isn't a skill) without touching this structure.

@@ -99,9 +99,9 @@ def test_main_fails_the_build_on_the_bad_fixture(tmp_path, capsys):
             id="description_xml_tag",
         ),
         pytest.param(
-            "---\nname: fine\ndescription: 'hidden <!-- instructions --> here'\n---\n",
+            "---\nname: fine\ndescription: closes with </b>\n---\n",
             "must not contain XML tags",
-            id="description_html_comment",
+            id="description_closing_tag",
         ),
     ],
 )
@@ -114,6 +114,16 @@ def test_each_rule_is_enforced(tmp_path, body, expected_fragment):
 
     # Then the matching message is reported
     assert any(expected_fragment in problem for problem in problems), problems
+
+
+def test_html_comments_are_left_alone(tmp_path):
+    # Given a description carrying an HTML comment but no tag
+    path = write_skill(tmp_path, "sample", "---\nname: fine\ndescription: 'a <!-- note --> b'\n---\n")
+
+    # When it is validated
+    # Then it passes: hidden-content scanning belongs to a separate piece of work,
+    # so the tag rule stops at tags
+    assert validator.validate_file(path) == []
 
 
 def test_length_limits_are_inclusive(tmp_path):

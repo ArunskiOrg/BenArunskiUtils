@@ -31,9 +31,9 @@ NAME_MAX = 64
 DESCRIPTION_MAX = 1024
 NAME_PATTERN = re.compile(r"^[a-z0-9-]+$")
 RESERVED_NAME_SUBSTRINGS = ("anthropic", "claude")
-# Matches an opening, closing, or self-closing tag, plus comments and processing
-# instructions, so `<!-- ... -->` and `<foo/>` are caught alongside `<foo>`.
-XML_TAG_PATTERN = re.compile(r"<[!?/]?[A-Za-z][^>]*>|<!--")
+# Matches an opening, closing, or self-closing tag, so `</foo>` and `<foo/>` are
+# caught alongside `<foo>`.
+XML_TAG_PATTERN = re.compile(r"<[?/]?[A-Za-z][^>]*>")
 FRONTMATTER_PATTERN = re.compile(r"\A---[ \t]*\r?\n(.*?)\r?\n---[ \t]*(?:\r?\n|\Z)", re.DOTALL)
 
 

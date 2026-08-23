@@ -27,6 +27,14 @@ uv tool install edge-tts   # for tts only; or: pipx install edge-tts / pip insta
 
 `edge-tts` is the default TTS engine `tts` renders with; it isn't needed for `explain-yourself` on its own. `tts`'s first run verifies the engine and records your choice, and other engines are available — see [`skills/tts/README.md`](skills/tts/README.md).
 
+Inside Claude Code, the same two skills install as plugins from this repo's own marketplace, no CLI needed:
+
+```
+/plugin marketplace add ArunskiOrg/BenArunskiUtils
+/plugin install tts@benarunski-utils
+/plugin install explain-yourself@benarunski-utils
+```
+
 Then ask Claude to read a document aloud, or explain a PR/commit/diff/file/directory. Each skill's own README covers its full requirements — see [`skills/tts/README.md`](skills/tts/README.md) and [`skills/explain-yourself/README.md`](skills/explain-yourself/README.md).
 
 ## Layout

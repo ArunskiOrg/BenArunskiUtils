@@ -1,5 +1,7 @@
 # BenArunskiUtils
 
+[![CI](https://github.com/ArunskiOrg/BenArunskiUtils/actions/workflows/ci.yml/badge.svg)](https://github.com/ArunskiOrg/BenArunskiUtils/actions/workflows/ci.yml)
+
 Public Claude Code skills and standalone utilities. First up: a skill that turns a document into spoken-word audio, and one that explains code the way you'd want it explained. More skills and utilities will land here over time under the same layout.
 
 ## What's here

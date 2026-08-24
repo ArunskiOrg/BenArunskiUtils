@@ -12,6 +12,8 @@ Turns a document into an MP3: (1) rewrite it into speech-friendly prose, (2) ren
 - Python 3.9+ to run this skill's own scripts.
 - A neural TTS engine, verified once via the bootstrap step below. `edge-tts` is the default this skill is built around; see `resources/bootstrap.py` for other free and paid options.
 
+What this skill executes, sends over the network, and writes to disk is disclosed in [README.md, "Permissions and network egress"](README.md#permissions-and-network-egress).
+
 ## Bootstrap
 
 Check whether `<SKILL_DIR>/.bootstrap-verified` exists.

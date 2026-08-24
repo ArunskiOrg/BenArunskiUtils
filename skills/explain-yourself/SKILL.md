@@ -9,9 +9,11 @@ Turns a code file, directory, pull request, commit, or diff into an explanation 
 
 ## Requirements
 
-- `git` on PATH for commit/diff sources; `gh` on PATH and authenticated for pull request sources.
+- `git` on PATH for commit sources; `gh` on PATH and authenticated for pull request sources.
 - Python 3.9+ to run `scripts/resolve_source.py`.
 - The `tts` skill, installed as a sibling skill, for the default spoken output (see this repo's root README for the install path). Without it this skill still works, text only.
+
+What this skill executes, sends over the network, and writes to disk is disclosed in [README.md, "Permissions and network egress"](README.md#permissions-and-network-egress).
 
 ## Inputs
 

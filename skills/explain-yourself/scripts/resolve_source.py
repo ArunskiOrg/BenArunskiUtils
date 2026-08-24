@@ -2,7 +2,7 @@
 # SPDX-License-Identifier: MIT
 """Resolve a pull request, commit, diff file, directory, or code excerpt into one text blob.
 
-Requires git on PATH for commit/diff sources, and gh (authenticated) for pull request sources.
+Requires git on PATH for commit sources, and gh (authenticated) for pull request sources.
 
 Usage:
     python3 resolve_source.py <source> -o <output.txt> [--kind pr|commit|diff|code|directory]

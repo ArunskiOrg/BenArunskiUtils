@@ -1,0 +1,44 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-marketplace.json",
+  "name": "benarunski-utils",
+  "description": "Public Claude Code skills and standalone utilities from BenArunskiUtils.",
+  "version": "1.0.0",
+  "owner": {
+    "name": "Benjamin Arunski",
+    "url": "https://github.com/BenArunski"
+  },
+  "plugins": [
+    {
+      "name": "tts",
+      "source": "./",
+      "strict": false,
+      "skills": ["./skills/tts"],
+      "description": "Convert a text/markdown document into spoken-word MP3 audio, after rewriting the source into speech-friendly prose so non-text elements read aloud correctly. Use when asked to convert a document to audio, to read something aloud, or when TTS or text to speech is mentioned.",
+      "category": "productivity",
+      "tags": ["tts", "text-to-speech", "audio", "mp3", "edge-tts", "documents"],
+      "author": {
+        "name": "Benjamin Arunski",
+        "url": "https://github.com/BenArunski"
+      },
+      "homepage": "https://github.com/ArunskiOrg/BenArunskiUtils/tree/main/skills/tts",
+      "repository": "https://github.com/ArunskiOrg/BenArunskiUtils",
+      "license": "MIT"
+    },
+    {
+      "name": "explain-yourself",
+      "source": "./",
+      "strict": false,
+      "skills": ["./skills/explain-yourself"],
+      "description": "Explain a code file, directory, pull request, commit, or diff, spoken aloud when the tts skill is installed and in writing otherwise. A PR, commit, or diff gets a file-by-file walkthrough of what changed and why; a file or directory gets a top-down explanation of structure, interactions, then the details that matter. Use when the user wants a change or a piece of code explained, walked through, or summarized.",
+      "category": "development",
+      "tags": ["code-explanation", "code-review", "pull-request", "diff", "onboarding", "audio"],
+      "author": {
+        "name": "Benjamin Arunski",
+        "url": "https://github.com/BenArunski"
+      },
+      "homepage": "https://github.com/ArunskiOrg/BenArunskiUtils/tree/main/skills/explain-yourself",
+      "repository": "https://github.com/ArunskiOrg/BenArunskiUtils",
+      "license": "MIT"
+    }
+  ]
+}

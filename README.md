@@ -115,6 +115,10 @@ python -m venv .venv
 
 See [`CONTRIBUTING.md`](CONTRIBUTING.md).
 
+## Issues
+
+Issues are triaged within 5 business days. This is a single-maintainer side project, so a first reply may be a question or a triage decision; fixes take longer.
+
 ## License
 
 [MIT](LICENSE).

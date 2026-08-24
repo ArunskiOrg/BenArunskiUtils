@@ -34,6 +34,24 @@ If you're changing a skill's behavior, re-run it end to end in Claude Code and d
 - Parametrize when multiple cases share the same action and differ only in input/expected output; give each case a name via `pytest.param(..., id=...)`.
 - Given/When/Then comments in every test body.
 
+## Behavioral evals
+
+`evals/` holds scenarios that test skill routing: whether a phrasing loads the right skill, and whether the phrasings a `description` explicitly excludes stay excluded.
+
+Run the affected skill's scenarios before merging any change that alters:
+
+- a `description` in `skills/*/SKILL.md`, including wording that looks cosmetic. Routing is decided from that string, so a reworded clause is a behavior change.
+- what a skill covers or refuses, whether or not the `description` changed.
+- the relationship between skills, such as `explain-yourself` deferring an already-prose document to `tts`.
+
+[`evals/README.md`](evals/README.md) has the scenario shape, the run procedure, the 2/2 pass rule, and the current baseline status. Follow it rather than improvising a run.
+
+The merge gate: every scenario for each affected skill has been run, both runs are reported in the PR description, and no scenario fails. That includes the negative-trigger cases; a negative case that now fires the skill is a regression even when the resulting answer is good. A change that moves a scenario from pass to fail needs either a fix or an explicit note in the PR saying why the new behavior is correct and the scenario is being updated.
+
+`tests/test_evals.py` validates the scenario files themselves and runs in CI, so a malformed or incomplete scenario fails the build. It checks structure, not behavior; it is no substitute for running the suite.
+
+Adding a skill therefore means adding `evals/<name>.json` alongside it: CI fails a `skills/<name>/` directory that has no matching eval file. Each file needs at least three scenarios, at least one of them a negative case whose `id` ends in `-negative`, every path in a scenario's `files` committed under `evals/fixtures/`, and a `baseline_no_skill` slot per scenario that stays `"measured": false` until a run backs it.
+
 ## Commit and PR
 
 Small, focused commits. PR description explains what changed and why, not just what.

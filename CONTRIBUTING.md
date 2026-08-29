@@ -36,9 +36,9 @@ If you're changing a skill's behavior, re-run it end to end in Claude Code and d
 
 ## Changing a skill: observe, refine, test
 
-Nothing in a `SKILL.md` is verifiable by reading it, so I don't edit one and call it done. I run a loop instead, with two Claude instances in different roles: one session I watch while it works with the current skill, and a second, separate session that tests whatever I changed. I repeat until a pass stops changing anything.
+Nothing in a `SKILL.md` is verifiable by reading it, so I don't edit one and call it done. I run a loop instead, with two Claude instances in different roles: Claude A, the session I watch while it works with the current skill, and Claude B, a separate session that tests whatever I changed. I repeat until a pass stops changing anything.
 
-**Observe.** Give the first session a task the skill is supposed to handle, then read the transcript rather than the answer. The answer is frequently fine while the skill is still wrong. Four things in a transcript mean the skill needs the edit, not the model:
+**Observe.** Give Claude A a task the skill is supposed to handle, then read the transcript rather than the answer. The answer is frequently fine while the skill is still wrong. Four things in a transcript mean the skill needs the edit, not the model:
 
 - Unexpected exploration paths. The model opens files or runs searches the skill never mentioned. It is reconstructing context the skill should have handed it; say the thing it went looking for.
 - Missed file-reference follow-throughs. The skill points at a `reference/` file and the model never opens it. Either the pointer doesn't say when to read it, or what's in there belongs inline.

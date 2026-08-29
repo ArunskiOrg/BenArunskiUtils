@@ -26,7 +26,7 @@ Which component to bump, from the installer's position rather than a library's:
 - **Minor** for new capability that leaves existing behavior intact: a new supported input, a new bundled script, a `description` widened to cover phrasings that previously routed nowhere. Classify a `description` edit by what the evals under Behavioral evals show routing actually did, not by the size of the edit.
 - **Patch** for corrections that change no contract: wording, typos, a bug fix in a script that restores documented behavior.
 
-`scripts/validate_skill_frontmatter.py` rejects a missing or non-semver `version` and runs in CI, alongside two size limits it also enforces: a `SKILL.md` body is capped at 500 lines after the frontmatter, and every markdown file reachable by links from a `SKILL.md` must sit at most one hop from it. Both bound what an agent loads before it can act, so content that outgrows them belongs in `README.md` or here rather than deeper in the reference tree.
+`scripts/validate_skill_frontmatter.py` rejects a missing or non-semver `version` and runs in CI, alongside two size limits it also enforces: a `SKILL.md` body is capped at 500 lines after the frontmatter, and every markdown file inside a skill's own folder that its `SKILL.md` can reach by links must sit at most one hop from it. Links leaving the folder are not followed, since the skill on the other end owns its own reference tree. Both limits bound what an agent loads before it can act, so content that outgrows them belongs in `README.md` or here rather than deeper in the reference tree.
 
 ## Before opening a PR
 

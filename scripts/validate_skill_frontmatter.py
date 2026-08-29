@@ -49,7 +49,9 @@ FRONTMATTER_PATTERN = re.compile(r"\A---[ \t]*\r?\n(.*?)\r?\n---[ \t]*(?:\r?\n|\
 # title (`[a](b.md "t")`) is dropped. Angle-bracket targets are unwrapped.
 MARKDOWN_LINK_PATTERN = re.compile(r"\[[^\]]*\]\(\s*<?([^)>\s]+)")
 # A target starting with a scheme (`https:`, `mailto:`) or `//` addresses
-# something outside the repository.
+# something outside the repository. A Windows drive letter matches the same
+# shape, which is the wanted result: an absolute machine path is not a
+# reference another checkout of this repository could follow.
 EXTERNAL_TARGET_PATTERN = re.compile(r"\A(?:[A-Za-z][A-Za-z0-9+.-]*:|//)")
 MARKDOWN_SUFFIXES = (".md", ".markdown")
 

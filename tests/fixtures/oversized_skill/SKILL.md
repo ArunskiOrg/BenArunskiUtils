@@ -5,7 +5,7 @@ description: Fixture whose body runs past the 500-line ceiling so the body-lengt
 
 # Oversized body fixture
 
-Every line below is filler. The point of the file is its length: the body must sit past the 500-line ceiling so a regression that drops the line-count rule shows up as a still-green build.
+Every line below is filler. The point of the file is its length: the body must sit past the 500-line ceiling so a regression that drops the line-count rule shows up as a failing check rather than a still-green build.
 
 - Filler step 1, present only to push the body past the ceiling.
 - Filler step 2, present only to push the body past the ceiling.

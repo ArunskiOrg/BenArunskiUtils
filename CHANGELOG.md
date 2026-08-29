@@ -22,5 +22,5 @@ Initial recorded version, covering the skill as already published. No behavior c
 Initial recorded version, covering the skill as already published. No behavior change accompanies the version field.
 
 - Rewrites a text or markdown document into speech-friendly prose, then renders it to MP3.
-- Renders with `edge-tts` by default; `resources/bootstrap.py` tracks the other engines and reports each one's availability and install command.
+- Renders with `edge-tts` by default; `resources/bootstrap.py` tracks the other engines and reports each one's availability, with an install command where one exists and a note otherwise.
 - Bundles `scripts/render.py` for rendering and `scripts/split_text.py` / `scripts/glue_text.py` for long documents.

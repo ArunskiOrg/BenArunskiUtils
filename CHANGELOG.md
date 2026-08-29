@@ -1,6 +1,6 @@
 # Changelog
 
-Per-skill version history. Each skill carries a semver `version` in its `SKILL.md` frontmatter and is versioned independently, so a release here names the skill it applies to. `CONTRIBUTING.md` states when to bump and what counts as a breaking change.
+Per-skill version history. Each skill carries a semver `version` in its `SKILL.md` frontmatter and is versioned independently, so a release here names the skill it applies to. [`CONTRIBUTING.md`](CONTRIBUTING.md) states when to bump and what counts as a breaking change.
 
 Dates are ISO 8601. Newest entries first.
 

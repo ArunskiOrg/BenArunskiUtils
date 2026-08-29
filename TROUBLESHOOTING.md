@@ -30,20 +30,18 @@ If `edge-tts --version` still reports a missing command after a successful insta
 
 ## `npm error code EBADENGINE` from `npx skills`
 
-The `skills` CLI declares a Node floor in its `engines` field, currently `>=22.20.0` (check the live value with `npm view skills engines`), so an older Node fails before anything installs. npm prints:
+The `skills` CLI declares a Node floor in its `engines` field; check the current value with `npm view skills engines`. An older Node fails before anything installs, and npm prints:
 
 ```
 npm error code EBADENGINE
 npm error engine Unsupported engine
-npm error engine Not compatible with your version of node/npm: skills@<version>
-npm error notsup Not compatible with your version of node/npm: skills@<version>
+npm error engine Not compatible with your version of node/npm: skills@1.5.23
+npm error notsup Not compatible with your version of node/npm: skills@1.5.23
 npm error notsup Required: {"node":">=22.20.0"}
 npm error notsup Actual:   {"node":"v18.20.4","npm":"10.7.0"}
 ```
 
-The `Actual` line reports whatever you are running.
-
-<!-- Provenance: these lines are npm's literal EBADENGINE output, reproduced against a package with an unsatisfiable engines field. The package name, version, and Actual values are illustrative, filled in from the skills CLI's published requirement rather than captured from a failing npx skills run. -->
+The version, `Required`, and `Actual` values above are one example; yours report your own npm's view of the package and your installed Node.
 
 Fix: check your version, then upgrade Node past the floor.
 
@@ -62,21 +60,22 @@ If you cannot upgrade Node, skip the CLI entirely: [No Node?](README.md#no-node)
 
 ## `python3` on Windows, and `.venv/bin` versus `.venv/Scripts`
 
-`python3` is the interpreter name on macOS and Linux. On Windows it usually resolves to a Microsoft Store app-execution alias that installs nothing and runs nothing. Running `python3` there prints something like:
-
-<!-- Provenance: close paraphrase of the alias message. It could not be captured verbatim here, since the alias is an app-execution reparse point and this machine resolves python3 to a real interpreter first. -->
-
+`python3` is the interpreter name on macOS and Linux. On Windows it usually resolves to a Microsoft Store app-execution alias that installs nothing and runs nothing. Running `python3` there prints something close to:
 
 ```
 Python was not found; run without arguments to install from the Microsoft Store, or disable this shortcut from Settings > Manage App Execution Aliases.
 ```
 
-Windows virtual environments also put executables in `Scripts`, not `bin`, so the bash form of the [Development](README.md#development) commands fails in PowerShell with:
+The exact wording varies by Windows build.
+
+Windows virtual environments also put executables in `Scripts`, not `bin`, so running the bash/zsh block from [Development](README.md#development) instead of the PowerShell one next to it fails with:
 
 ```
 .venv/bin/pip: The term '.venv/bin/pip' is not recognized as a name of a cmdlet, function, script file, or executable program.
 Check the spelling of the name, or if a path was included, verify that the path is correct and try again.
 ```
+
+That is PowerShell 7's wording. Windows PowerShell 5.1 says "as the name of a cmdlet, function, script file, or operable program" instead, so search for the path rather than the full sentence.
 
 Fix: use `python` or `py -3`, and the `Scripts` path.
 

@@ -14,7 +14,7 @@ Then ask Claude to convert a document to audio, or say "read this aloud" / menti
 
 ## Requirements and choosing a TTS engine
 
-Python 3.9+ to run the scripts in this folder, plus a verified TTS engine. The skill's first run walks through `resources/bootstrap.py`, which checks prerequisites and helps pick an engine — free or paid. Later runs skip that step; to change engines, clear the recorded choice with `python3 resources/bootstrap.py --reset` (or ask Claude to run it), and the next run walks through bootstrap again.
+Python 3.9+ to run the scripts in this folder, plus a verified TTS engine. For the default engine that means `edge-tts` at or above the minimum version, installed and confirmed per the [root README's Prerequisites section](https://github.com/ArunskiOrg/BenArunskiUtils#prerequisites), which names the version and the install and verification commands. The skill's first run walks through `resources/bootstrap.py`, which checks prerequisites and helps pick an engine — free or paid. Later runs skip that step; to change engines, clear the recorded choice with `python3 resources/bootstrap.py --reset` (or ask Claude to run it), and the next run walks through bootstrap again.
 
 `scripts/split_text.py` and `scripts/glue_text.py` are there for the rewrite agents, which use them to chunk and reassemble a document too long for one reply.
 

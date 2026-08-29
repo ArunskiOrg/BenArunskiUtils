@@ -1,5 +1,6 @@
 import sys
 
+import bootstrap
 import pytest
 import render
 
@@ -23,6 +24,16 @@ def test_find_edge_tts_exits_with_install_help_when_missing(monkeypatch):
     # Then it exits with install instructions rather than failing later at subprocess time
     with pytest.raises(SystemExit, match="edge-tts was not found"):
         render.find_edge_tts()
+
+
+def test_install_help_pins_the_minimum_version_bootstrap_declares():
+    # Given the install help shown when the CLI is missing
+    # When a user reads it
+    # Then every install command pins the same minimum bootstrap declares, and it names the
+    # command that confirms the installed version
+    assert render.MIN_EDGE_TTS == bootstrap.MIN_EDGE_TTS
+    assert render.INSTALL_HELP.count(f'"edge-tts>={render.MIN_EDGE_TTS}"') == 3
+    assert "edge-tts --version" in render.INSTALL_HELP
 
 
 def test_main_builds_edge_tts_command_with_defaults(tmp_path, monkeypatch):

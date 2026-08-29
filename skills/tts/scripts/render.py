@@ -17,21 +17,27 @@ import subprocess
 import sys
 from pathlib import Path
 
+SKILL_ROOT = Path(__file__).resolve().parent.parent
+# resources/ is a sibling of this scripts/ folder, not an installed package, so it
+# reaches the import path here rather than through a normal import.
+sys.path.insert(0, str(SKILL_ROOT / "resources"))
+from bootstrap import MIN_EDGE_TTS  # noqa: E402
+
 DEFAULT_VOICE = "en-US-AndrewNeural"
 DEFAULT_RATE = "-12%"
 
 # Same skill-root-relative path resources/bootstrap.py writes to.
-MARKER_PATH = Path(__file__).resolve().parent.parent / ".bootstrap-verified"
+MARKER_PATH = SKILL_ROOT / ".bootstrap-verified"
 WIRED_ENGINES = {"edge-tts"}
 
-INSTALL_HELP = """edge-tts was not found on PATH.
+INSTALL_HELP = f"""edge-tts was not found on PATH.
 
 Install it (it's separate from whatever Python runs this script):
-    uv tool install edge-tts
-    pipx install edge-tts
-    pip install edge-tts
+    uv tool install "edge-tts>={MIN_EDGE_TTS}"
+    pipx install "edge-tts>={MIN_EDGE_TTS}"
+    pip install "edge-tts>={MIN_EDGE_TTS}"
 
-Requires Python 3.7+. https://pypi.org/project/edge-tts/"""
+Confirm with `edge-tts --version`. Requires Python 3.7+. https://pypi.org/project/edge-tts/"""
 
 
 def find_edge_tts() -> str:

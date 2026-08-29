@@ -30,7 +30,7 @@ If `edge-tts --version` still reports a missing command after a successful insta
 
 ## `npm error code EBADENGINE` from `npx skills`
 
-The `skills` CLI declares `"engines": {"node": ">=22.20.0"}`, so an older Node fails before anything installs. npm prints:
+The `skills` CLI declares a Node floor in its `engines` field, currently `>=22.20.0` (check the live value with `npm view skills engines`), so an older Node fails before anything installs. npm prints:
 
 ```
 npm error code EBADENGINE
@@ -41,20 +41,31 @@ npm error notsup Required: {"node":">=22.20.0"}
 npm error notsup Actual:   {"node":"v18.20.4","npm":"10.7.0"}
 ```
 
-The `Actual` line reports whatever you are running. These lines are npm's literal `EBADENGINE` output, reproduced locally against a package with an unsatisfiable `engines` field; the package name, version, and `Actual` values are filled in from the `skills` requirement rather than captured from a failing `npx skills` run.
+The `Actual` line reports whatever you are running.
 
-Fix: check your version, then upgrade Node to 22.20.0 or newer.
+<!-- Provenance: these lines are npm's literal EBADENGINE output, reproduced against a package with an unsatisfiable engines field. The package name, version, and Actual values are illustrative, filled in from the skills CLI's published requirement rather than captured from a failing npx skills run. -->
+
+Fix: check your version, then upgrade Node past the floor.
 
 ```bash
 node --version
-nvm install 22 && nvm use 22
 ```
+
+```bash
+nvm install 22
+nvm use 22
+```
+
+nvm-windows wants an exact version rather than a major: `nvm install 22.20.0`, then `nvm use 22.20.0`.
 
 If you cannot upgrade Node, skip the CLI entirely: [No Node?](README.md#no-node) covers cloning the repo and copying the skill folders in by hand.
 
 ## `python3` on Windows, and `.venv/bin` versus `.venv/Scripts`
 
-`python3` is the interpreter name on macOS and Linux. On Windows it usually resolves to a Microsoft Store app-execution alias that installs nothing and runs nothing. Close paraphrase of the alias message, not captured verbatim on a machine where it is active:
+`python3` is the interpreter name on macOS and Linux. On Windows it usually resolves to a Microsoft Store app-execution alias that installs nothing and runs nothing. Running `python3` there prints something like:
+
+<!-- Provenance: close paraphrase of the alias message. It could not be captured verbatim here, since the alias is an app-execution reparse point and this machine resolves python3 to a real interpreter first. -->
+
 
 ```
 Python was not found; run without arguments to install from the Microsoft Store, or disable this shortcut from Settings > Manage App Execution Aliases.
@@ -94,7 +105,7 @@ On a machine where a corporate proxy, network filter, or antivirus product inter
 ssl.SSLCertVerificationError: [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate
 ```
 
-The interceptor signs traffic with its own root certificate, which the operating system trusts but Python's bundled certificate store does not. Fix: point Python at a certificate bundle that includes the interceptor's root. Export that root from your certificate store, append it to a bundle, and set the environment variable your platform reads.
+The interceptor signs traffic with its own root certificate, and verification fails when that root is missing from the certificate store Python checks against. Fix: export the interceptor's root from your system certificate store, append it to a PEM bundle, and point Python at that bundle with `SSL_CERT_FILE`. Python's `ssl` module reads that variable, so it applies to `edge-tts` too; `python3 -c "import ssl; print(ssl.get_default_verify_paths())"` prints the paths currently in effect.
 
 ```bash
 export SSL_CERT_FILE=/path/to/bundle-with-corporate-root.pem
@@ -104,7 +115,7 @@ export SSL_CERT_FILE=/path/to/bundle-with-corporate-root.pem
 $env:SSL_CERT_FILE = "C:/path/to/bundle-with-corporate-root.pem"
 ```
 
-`REQUESTS_CA_BUNDLE` works the same way for libraries that read it. Do not disable certificate verification as a workaround. If the interception is not something you control, render on a machine outside that network, or pick a different engine from [`skills/tts/README.md`](skills/tts/README.md#requirements-and-choosing-a-tts-engine).
+Do not disable certificate verification as a workaround. If the interception is not something you control, render on a machine outside that network, or pick a different engine from [`skills/tts/README.md`](skills/tts/README.md#requirements-and-choosing-a-tts-engine).
 
 ## Something else
 

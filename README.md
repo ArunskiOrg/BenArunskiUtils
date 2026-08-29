@@ -27,7 +27,7 @@ edge-tts --version
 
 That prints the installed version; anything 7.2.8 or newer is fine. If the command is not found, the install landed somewhere off your `PATH`, or the shell needs restarting to pick it up.
 
-`edge-tts` is an unofficial client for a Microsoft service rather than a supported API, which affects whether you should build on it: read [the trust boundary in `skills/tts/README.md`](skills/tts/README.md#requirements-and-choosing-a-tts-engine) before using it for anything beyond personal work. Paid engines are listed there too.
+Before using `edge-tts` for anything beyond personal work, read [the trust boundary in `skills/tts/README.md`](skills/tts/README.md#requirements-and-choosing-a-tts-engine). Paid engines are listed there too.
 
 ## 30-second install
 

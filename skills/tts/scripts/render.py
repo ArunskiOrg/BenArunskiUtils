@@ -17,14 +17,18 @@ import subprocess
 import sys
 from pathlib import Path
 
+SKILL_ROOT = Path(__file__).resolve().parent.parent
+# resources/ is a sibling of this scripts/ folder, not an installed package, so it
+# reaches the import path here rather than through a normal import.
+sys.path.insert(0, str(SKILL_ROOT / "resources"))
+from bootstrap import MIN_EDGE_TTS  # noqa: E402
+
 DEFAULT_VOICE = "en-US-AndrewNeural"
 DEFAULT_RATE = "-12%"
 
 # Same skill-root-relative path resources/bootstrap.py writes to.
-MARKER_PATH = Path(__file__).resolve().parent.parent / ".bootstrap-verified"
+MARKER_PATH = SKILL_ROOT / ".bootstrap-verified"
 WIRED_ENGINES = {"edge-tts"}
-
-MIN_EDGE_TTS = "7.2.8"
 
 INSTALL_HELP = f"""edge-tts was not found on PATH.
 

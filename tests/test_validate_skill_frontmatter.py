@@ -5,7 +5,23 @@ import pytest
 import validate_skill_frontmatter as validator
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
-BAD_FIXTURE = Path(__file__).resolve().parent / "fixtures" / "bad_skill" / "SKILL.md"
+FIXTURES = Path(__file__).resolve().parent / "fixtures"
+BAD_FIXTURE = FIXTURES / "bad_skill" / "SKILL.md"
+OVERSIZED_FIXTURE_DIR = FIXTURES / "oversized_skill"
+DEEP_REFERENCE_FIXTURE_DIR = FIXTURES / "deep_reference_skill"
+
+
+def install_fixture_skill(root: Path, fixture_dir: Path, slug: str) -> Path:
+    """Copy a fixture skill folder into a repository root the validator can scan."""
+    destination = root / "skills" / slug
+    destination.parent.mkdir(parents=True, exist_ok=True)
+    shutil.copytree(fixture_dir, destination)
+    return destination / "SKILL.md"
+
+
+def body_of(line_count: int) -> str:
+    lines = "\n".join(f"line {number}" for number in range(1, line_count + 1))
+    return f"---\nname: fine\ndescription: d\n---\n{lines}\n"
 
 
 def write_skill(root: Path, slug: str, body: str) -> Path:
@@ -158,6 +174,131 @@ def test_safe_load_refuses_python_object_tags(tmp_path):
 
     # Then safe_load rejects the tag as a parse error instead of constructing anything
     assert any("not valid YAML" in problem for problem in problems), problems
+
+
+def test_body_limit_is_inclusive(tmp_path):
+    # Given a body sitting exactly on the 500-line ceiling
+    path = write_skill(tmp_path, "sample", body_of(500))
+
+    # When it is validated
+    # Then the boundary value is accepted
+    assert validator.validate_file(path) == []
+
+
+def test_one_line_over_the_body_limit_is_rejected(tmp_path):
+    # Given a body one line past the ceiling
+    path = write_skill(tmp_path, "sample", body_of(501))
+
+    # When it is validated
+    problems = validator.validate_file(path)
+
+    # Then the count and the limit are both named
+    assert problems == ["body is 501 lines, over the 500-line limit"]
+
+
+def test_oversized_fixture_fails_the_body_limit():
+    # Given a committed SKILL.md whose only violation is its length
+    problems = validator.validate_file(OVERSIZED_FIXTURE_DIR / "SKILL.md")
+
+    # When it is validated
+    # Then the body rule is the one that fires
+    assert len(problems) == 1
+    assert "over the 500-line limit" in problems[0]
+
+
+def test_main_fails_the_build_on_the_oversized_fixture(tmp_path, capsys):
+    # Given a repository root whose only skill has an oversized body
+    install_fixture_skill(tmp_path, OVERSIZED_FIXTURE_DIR, "oversized-skill")
+
+    # When the validator runs the way CI runs it
+    exit_code = validator.main([str(tmp_path)])
+
+    # Then the build fails and the message names the offending file
+    assert exit_code == 1
+    stderr = capsys.readouterr().err
+    assert "skills/oversized-skill/SKILL.md: body is" in stderr
+    assert "1 of 1 SKILL.md file(s) failed validation" in stderr
+
+
+def test_one_hop_reference_is_allowed(tmp_path):
+    # Given a SKILL.md linking a reference file that links nothing further
+    path = write_skill(tmp_path, "sample", "---\nname: fine\ndescription: d\n---\n\n[guide](guide.md)\n")
+    (path.parent / "guide.md").write_text("# guide\n\nno onward links\n", encoding="utf-8")
+
+    # When it is validated
+    # Then one hop passes
+    assert validator.validate_file(path) == []
+
+
+def test_deep_reference_fixture_fails_the_depth_limit():
+    # Given a committed skill whose reference forwards to a second file
+    problems = validator.validate_file(DEEP_REFERENCE_FIXTURE_DIR / "SKILL.md")
+
+    # When it is validated
+    # Then the depth rule fires and the message spells out the chain
+    assert problems == [
+        "reference chain runs 2 hops from SKILL.md, over the 1-hop limit: "
+        "reference/guide.md -> reference/details.md"
+    ]
+
+
+def test_main_fails_the_build_on_the_deep_reference_fixture(tmp_path, capsys):
+    # Given a repository root whose only skill nests its references two deep
+    install_fixture_skill(tmp_path, DEEP_REFERENCE_FIXTURE_DIR, "deep-reference-skill")
+
+    # When the validator runs the way CI runs it
+    exit_code = validator.main([str(tmp_path)])
+
+    # Then the build fails and the message names the offending file
+    assert exit_code == 1
+    stderr = capsys.readouterr().err
+    assert "skills/deep-reference-skill/SKILL.md: reference chain runs 2 hops" in stderr
+    assert "1 of 1 SKILL.md file(s) failed validation" in stderr
+
+
+def test_links_leaving_the_skill_folder_are_not_followed(tmp_path):
+    # Given a SKILL.md pointing at a sibling skill that has its own nested references
+    body = "---\nname: fine\ndescription: d\n---\n\n[other](../other/README.md)\n"
+    path = write_skill(tmp_path, "sample", body)
+    other = tmp_path / "skills" / "other"
+    other.mkdir(parents=True)
+    (other / "README.md").write_text("[deeper](deeper.md)\n", encoding="utf-8")
+    (other / "deeper.md").write_text("# deeper\n", encoding="utf-8")
+
+    # When it is validated
+    # Then the sibling skill's depth is left to the sibling skill
+    assert validator.validate_file(path) == []
+
+
+@pytest.mark.parametrize(
+    "link",
+    [
+        pytest.param("[home](https://example.com/guide.md)", id="external_url"),
+        pytest.param("[section](#requirements)", id="same_file_anchor"),
+        pytest.param("[script](guide.py)", id="non_markdown_target"),
+        pytest.param("[absent](missing.md)", id="target_that_does_not_exist"),
+    ],
+)
+def test_targets_that_are_not_local_markdown_files_are_ignored(tmp_path, link):
+    # Given a reference file whose onward link is not a local markdown file
+    path = write_skill(tmp_path, "sample", "---\nname: fine\ndescription: d\n---\n\n[guide](guide.md)\n")
+    (path.parent / "guide.md").write_text(f"# guide\n\n{link}\n", encoding="utf-8")
+
+    # When it is validated
+    # Then nothing counts as a second hop
+    assert validator.validate_file(path) == []
+
+
+def test_reference_cycles_terminate(tmp_path):
+    # Given two reference files that link back to each other and to the SKILL.md
+    path = write_skill(tmp_path, "sample", "---\nname: fine\ndescription: d\n---\n\n[a](a.md)\n")
+    (path.parent / "a.md").write_text("[b](b.md)\n", encoding="utf-8")
+    (path.parent / "b.md").write_text("[a](a.md)\n[skill](SKILL.md)\n", encoding="utf-8")
+
+    # When it is validated
+    # Then the walk stops instead of looping, reporting the one over-limit hop
+    problems = validator.validate_file(path)
+    assert problems == ["reference chain runs 2 hops from SKILL.md, over the 1-hop limit: a.md -> b.md"]
 
 
 def test_missing_skills_directory_is_an_error(tmp_path, capsys):

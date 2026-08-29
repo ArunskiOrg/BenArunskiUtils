@@ -1,6 +1,7 @@
 ---
 name: oversized-body-fixture
 description: Fixture whose body runs past the 500-line ceiling so the body-length rule has something to fail on. Its frontmatter is valid, so a failure here can only come from the line count.
+version: 1.0.0
 ---
 
 # Oversized body fixture

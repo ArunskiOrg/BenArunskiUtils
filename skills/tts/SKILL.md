@@ -1,6 +1,7 @@
 ---
 name: tts
 description: Convert a text/markdown document into spoken-word MP3 audio, after rewriting the source into speech-friendly prose (making non-text elements readable aloud). Use when the user asks to convert a document to audio, to read something aloud, mentions TTS or "text to speech", or says to "speak" something. Do NOT auto-engage on bare "say" / "tell me" idioms — those usually want a visual reply; instead ask "btw, do you want mp3 output?" - in that case, only run this skill if they confirm.
+version: 1.0.0
 ---
 
 # tts — document to speech

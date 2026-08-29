@@ -1,6 +1,7 @@
 ---
 name: deep-reference-fixture
 description: Fixture whose reference chain runs two hops so the reference-depth rule has something to fail on. Its frontmatter is valid and its body is short, so a failure here can only come from the chain depth.
+version: 1.0.0
 ---
 
 # Deep reference fixture

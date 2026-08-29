@@ -9,13 +9,33 @@ Public Claude Code skills and standalone utilities. First up: a skill that turns
 - [`tts`](skills/tts/) — turns a document into an MP3. Rewrites it into speech-friendly prose first (TTS engines mangle code, symbols, tables, and markdown), then renders with `edge-tts`.
 - [`explain-yourself`](skills/explain-yourself/) — explains a code file, directory, pull request, commit, or diff, matching the explanation to what it's explaining: a file-by-file walkthrough for a PR or diff, a top-down structure-then-details walkthrough for a file or directory. With `tts` installed alongside it, the explanation is spoken aloud by default; without it, text only.
 
+## Prerequisites
+
+The `tts` skill renders audio through `edge-tts`, a separate CLI it shells out to. Install it before the first `tts` run, or that run fails on a missing engine. `explain-yourself` on its own does not need it. Minimum version 7.2.8; pick whichever installer you already have:
+
+```bash
+uv tool install "edge-tts>=7.2.8"   # one of these three, not all three
+pipx install "edge-tts>=7.2.8"
+pip install "edge-tts>=7.2.8"
+```
+
+Confirm it worked before invoking the skill through an agent:
+
+```bash
+edge-tts --version
+```
+
+That prints the installed version; anything 7.2.8 or newer is fine. If the command is not found, the install landed somewhere off your `PATH`, or the shell needs restarting to pick it up.
+
+`edge-tts` is an unofficial client for a Microsoft service rather than a supported API, which affects whether you should build on it: read [the trust boundary in `skills/tts/README.md`](skills/tts/README.md#requirements-and-choosing-a-tts-engine) before using it for anything beyond personal work. Paid engines are listed there too.
+
 ## 30-second install
 
 Both skills, at the user level, with the [`skills`](https://github.com/vercel-labs/skills) CLI:
 
 ```bash
 npx skills add ArunskiOrg/BenArunskiUtils --all -g
-uv tool install edge-tts   # for tts only; or: pipx install edge-tts / pip install edge-tts
+uv tool install "edge-tts>=7.2.8"   # for tts only; see Prerequisites above for pipx/pip
 ```
 
 `--all` takes both skills and installs them for every coding agent the CLI detects; `-g` puts them in your user-level skills directory. Variations, same command otherwise:
@@ -25,7 +45,7 @@ uv tool install edge-tts   # for tts only; or: pipx install edge-tts / pip insta
 - `--copy` to copy the files rather than symlink them
 - `-l` to list what's in the repo without installing anything
 
-`edge-tts` is the default TTS engine `tts` renders with; it isn't needed for `explain-yourself` on its own. `tts`'s first run verifies the engine and records your choice, and other engines are available — see [`skills/tts/README.md`](skills/tts/README.md).
+`tts`'s first run verifies the engine and records your choice, and other engines are available — see [`skills/tts/README.md`](skills/tts/README.md).
 
 Inside Claude Code, the same two skills install as plugins from this repo's own marketplace, without the `skills` CLI. This installs the skill files only, so `tts` still needs `edge-tts` (or another engine) installed separately, as above:
 

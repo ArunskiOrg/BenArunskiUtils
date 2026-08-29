@@ -22,14 +22,19 @@ from pathlib import Path
 
 MIN_PYTHON = (3, 9)
 
+# The edge-tts release this repo's render path is pinned to. Stated rather than probed:
+# bootstrap runs no subprocesses, and `edge-tts --version` is the user-facing check
+# (see the root README's Prerequisites section).
+MIN_EDGE_TTS = "7.2.8"
+
 # Lives next to SKILL.md, one level up from this resources/ folder, so it
 # survives however the skill folder was installed (copy, symlink, git clone).
 MARKER_PATH = Path(__file__).resolve().parent.parent / ".bootstrap-verified"
 
 PIP_STYLE_INSTALL = {
-    "uv": "uv tool install edge-tts",
-    "pipx": "pipx install edge-tts",
-    "pip": "pip install edge-tts",
+    "uv": f'uv tool install "edge-tts>={MIN_EDGE_TTS}"',
+    "pipx": f'pipx install "edge-tts>={MIN_EDGE_TTS}"',
+    "pip": f'pip install "edge-tts>={MIN_EDGE_TTS}"',
 }
 
 
@@ -52,6 +57,7 @@ ENGINES = {
         "install": lambda os_name: dict(PIP_STYLE_INSTALL),
         "note": (
             "Cross-platform CLI, no account needed. The default this repo is built around. "
+            f"Minimum version {MIN_EDGE_TTS}; confirm with `edge-tts --version`. "
             "Unofficial (reverse-engineered from Microsoft Edge, not a public API) — the "
             "maintainer says it's for personal use; see the README before relying on it "
             "commercially."

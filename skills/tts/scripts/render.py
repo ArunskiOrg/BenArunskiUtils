@@ -24,14 +24,16 @@ DEFAULT_RATE = "-12%"
 MARKER_PATH = Path(__file__).resolve().parent.parent / ".bootstrap-verified"
 WIRED_ENGINES = {"edge-tts"}
 
-INSTALL_HELP = """edge-tts was not found on PATH.
+MIN_EDGE_TTS = "7.2.8"
+
+INSTALL_HELP = f"""edge-tts was not found on PATH.
 
 Install it (it's separate from whatever Python runs this script):
-    uv tool install edge-tts
-    pipx install edge-tts
-    pip install edge-tts
+    uv tool install "edge-tts>={MIN_EDGE_TTS}"
+    pipx install "edge-tts>={MIN_EDGE_TTS}"
+    pip install "edge-tts>={MIN_EDGE_TTS}"
 
-Requires Python 3.7+. https://pypi.org/project/edge-tts/"""
+Confirm with `edge-tts --version`. Requires Python 3.7+. https://pypi.org/project/edge-tts/"""
 
 
 def find_edge_tts() -> str:

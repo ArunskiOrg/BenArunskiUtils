@@ -46,6 +46,26 @@ def test_edge_tts_unavailable_reports_install_commands(monkeypatch):
     assert "uv" in status["edge-tts"]["install"]
 
 
+def test_edge_tts_install_commands_pin_the_minimum_version():
+    # Given the registry's pip-style install commands
+    # When each is read
+    # Then every one pins the minimum version the skill is documented against
+    assert all(
+        f'edge-tts>={bootstrap.MIN_EDGE_TTS}' in command
+        for command in bootstrap.PIP_STYLE_INSTALL.values()
+    )
+
+
+def test_edge_tts_note_states_the_minimum_version():
+    # Given the edge-tts registry entry
+    note = bootstrap.ENGINES["edge-tts"]["note"]
+
+    # When a user reads the note bootstrap prints
+    # Then it names the minimum version and how to confirm the installed one
+    assert bootstrap.MIN_EDGE_TTS in note
+    assert "edge-tts --version" in note
+
+
 @pytest.mark.parametrize(
     "os_name, which_result, expect_available",
     [
@@ -114,8 +134,8 @@ def test_cmd_check_exits_with_install_commands_when_unavailable(monkeypatch):
     monkeypatch.setattr(bootstrap.shutil, "which", lambda name: None)
 
     # When checking it by id
-    # Then it exits with the install commands, not a bare failure
-    with pytest.raises(SystemExit, match="uv tool install edge-tts"):
+    # Then it exits with the install commands, version-pinned, not a bare failure
+    with pytest.raises(SystemExit, match=f'uv tool install "edge-tts>={bootstrap.MIN_EDGE_TTS}"'):
         bootstrap.cmd_check("edge-tts")
 
 

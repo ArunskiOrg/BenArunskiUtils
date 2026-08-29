@@ -34,6 +34,21 @@ If you're changing a skill's behavior, re-run it end to end in Claude Code and d
 - Parametrize when multiple cases share the same action and differ only in input/expected output; give each case a name via `pytest.param(..., id=...)`.
 - Given/When/Then comments in every test body.
 
+## Changing a skill: observe, refine, test
+
+Nothing in a `SKILL.md` is verifiable by reading it, so I don't edit one and call it done. I run a loop instead, with two Claude instances in different roles: one session I watch while it works with the current skill, and a second, separate session that tests whatever I changed. I repeat until a pass stops changing anything.
+
+**Observe.** Give the first session a task the skill is supposed to handle, then read the transcript rather than the answer. The answer is frequently fine while the skill is still wrong. Four things in a transcript mean the skill needs the edit, not the model:
+
+- Unexpected exploration paths. The model opens files or runs searches the skill never mentioned. It is reconstructing context the skill should have handed it; say the thing it went looking for.
+- Missed file-reference follow-throughs. The skill points at a `reference/` file and the model never opens it. Either the pointer doesn't say when to read it, or what's in there belongs inline.
+- Overreliance on one section. Run after run loads the same bundled file for the same passage. Promote that passage into `SKILL.md` and drop the round trip.
+- Ignored bundled files. A file goes unread across several runs. Cut it. An unread file still costs review attention and still rots.
+
+**Refine.** Change one thing per pass, so the next observation attributes cleanly. Process notes like this section stay in `CONTRIBUTING.md`; `SKILL.md` is loaded on every trigger, and prose a contributor needs once is a permanent tax there.
+
+**Test with Claude B.** Refining against the same session that produced the problem proves nothing, because that session already holds the context you were trying to encode. Hand the change to a fresh session with no memory of the discussion. `evals/` is that step: run the affected skill's scenarios as described under Behavioral evals below, and report the results in the PR.
+
 ## Behavioral evals
 
 `evals/` holds scenarios that test skill routing: whether a phrasing loads the right skill, and whether the phrasings a `description` explicitly excludes stay excluded.

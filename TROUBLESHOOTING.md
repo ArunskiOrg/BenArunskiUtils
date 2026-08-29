@@ -104,7 +104,15 @@ On a machine where a corporate proxy, network filter, or antivirus product inter
 ssl.SSLCertVerificationError: [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate
 ```
 
-The interceptor signs traffic with its own root certificate, and verification fails when that root is missing from the certificate store Python checks against. Fix: export the interceptor's root from your system certificate store, append it to a PEM bundle, and point Python at that bundle with `SSL_CERT_FILE`. Python's `ssl` module reads that variable, so it applies to `edge-tts` too; `python3 -c "import ssl; print(ssl.get_default_verify_paths())"` prints the paths currently in effect.
+The interceptor signs traffic with its own root certificate, and verification fails when that root is missing from the certificate store Python checks against. Fix: export the interceptor's root from your system certificate store, append it to a PEM bundle, and point Python at that bundle with `SSL_CERT_FILE`. Python's `ssl` module reads that variable, so it applies to `edge-tts` too. To print the paths currently in effect:
+
+```bash
+python3 -c "import ssl; print(ssl.get_default_verify_paths())"
+```
+
+```powershell
+py -3 -c "import ssl; print(ssl.get_default_verify_paths())"
+```
 
 ```bash
 export SSL_CERT_FILE=/path/to/bundle-with-corporate-root.pem

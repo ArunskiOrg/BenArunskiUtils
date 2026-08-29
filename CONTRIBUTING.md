@@ -31,12 +31,13 @@ Which component to bump, from the installer's position rather than a library's:
 ## Before opening a PR
 
 ```
-python3 -m venv .venv && .venv/bin/pip install pytest ruff
+python3 -m venv .venv && .venv/bin/pip install pytest ruff pyyaml
 .venv/bin/python -m ruff check .
+.venv/bin/python scripts/validate_skill_frontmatter.py
 .venv/bin/python -m pytest
 ```
 
-(Windows: `.venv\Scripts\pip`, etc.) Both run in CI on every PR; a red check blocks merge.
+(Windows: `.venv\Scripts\pip`, etc.) All three run in CI on every PR; a red check blocks merge.
 
 If you're changing a skill's behavior, re-run it end to end in Claude Code and describe what you verified in the PR description — not just that tests pass.
 

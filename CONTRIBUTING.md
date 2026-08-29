@@ -23,10 +23,8 @@ Every `skills/<name>/SKILL.md` carries a semver `version` in its frontmatter, an
 Which component to bump, from the installer's position rather than a library's:
 
 - **Major** for a breaking change: the skill is renamed or removed; the trigger `description` changes such that requests that used to route here no longer do, or requests that used to go elsewhere now land here; a bundled script is removed, renamed, or has its command-line contract changed; a new external dependency is required (a tool on `PATH`, a Python package, an API key); or the skill drops support for an input it used to accept. What these share is that an existing installation stops behaving as it did, and re-reading the skill before updating is warranted.
-- **Minor** for new capability that leaves existing behavior intact: a new supported input, a new bundled script, a `description` widened to cover phrasings that previously routed nowhere.
+- **Minor** for new capability that leaves existing behavior intact: a new supported input, a new bundled script, a `description` widened to cover phrasings that previously routed nowhere. Classify a `description` edit by what the evals under Behavioral evals show routing actually did, not by the size of the edit.
 - **Patch** for corrections that change no contract: wording, typos, a bug fix in a script that restores documented behavior.
-
-A `description` edit is a behavior change even when it reads as cosmetic, because routing is decided from that string. Run the affected skill's evals as described below and classify the result by what routing actually did, not by how large the edit looked.
 
 `scripts/validate_skill_frontmatter.py` rejects a missing or non-semver `version` and runs in CI, alongside two size limits it also enforces: a `SKILL.md` body is capped at 500 lines after the frontmatter, and every markdown file reachable by links from a `SKILL.md` must sit at most one hop from it. Both bound what an agent loads before it can act, so content that outgrows them belongs in `README.md` or here rather than deeper in the reference tree.
 

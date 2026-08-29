@@ -54,7 +54,7 @@ nvm install 22
 nvm use 22
 ```
 
-nvm-windows wants an exact version rather than a major: `nvm install 22.20.0`, then `nvm use 22.20.0`.
+nvm-windows wants an exact version rather than a major, so take the version from the `Required` line of your own error: `nvm install 22.20.0`, then `nvm use 22.20.0`.
 
 If you cannot upgrade Node, skip the CLI entirely: [No Node?](README.md#no-node) covers cloning the repo and copying the skill folders in by hand.
 

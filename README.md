@@ -4,6 +4,8 @@
 
 Public Claude Code skills and standalone utilities. First up: a skill that turns a document into spoken-word audio, and one that explains code the way you'd want it explained. More skills and utilities will land here over time under the same layout.
 
+[Prerequisites](#prerequisites) · [30-second install](#30-second-install) · [Troubleshooting](TROUBLESHOOTING.md) · [Development](#development)
+
 ## What's here
 
 - [`tts`](skills/tts/) — turns a document into an MP3. Rewrites it into speech-friendly prose first (TTS engines mangle code, symbols, tables, and markdown), then renders with `edge-tts`.
@@ -25,7 +27,7 @@ Confirm it worked before invoking the skill through an agent:
 edge-tts --version
 ```
 
-That prints the installed version; anything 7.2.8 or newer is fine. If the command is not found, the install landed somewhere off your `PATH`, or the shell needs restarting to pick it up.
+That prints the installed version; anything 7.2.8 or newer is fine. If the command is not found, the install landed somewhere off your `PATH`, or the shell needs restarting to pick it up. If a `tts` run fails with `edge-tts was not found on PATH.`, see [`edge-tts was not found on PATH.` in TROUBLESHOOTING.md](TROUBLESHOOTING.md#edge-tts-was-not-found-on-path).
 
 Before using `edge-tts` for anything beyond personal work, read [the trust boundary in `skills/tts/README.md`](skills/tts/README.md#requirements-and-choosing-a-tts-engine). Paid engines are listed there too.
 
@@ -56,6 +58,8 @@ Inside Claude Code, the same two skills install as plugins from this repo's own 
 ```
 
 Then ask Claude to read a document aloud, or explain a PR/commit/diff/file/directory. Each skill's own README covers its full requirements — see [`skills/tts/README.md`](skills/tts/README.md) and [`skills/explain-yourself/README.md`](skills/explain-yourself/README.md).
+
+If any of this fails, [TROUBLESHOOTING.md](TROUBLESHOOTING.md) lists the error text for the common cases: a missing `edge-tts`, an `npx skills` run rejected on Node version, and the Windows `python3` and `.venv/Scripts` quirks.
 
 ### No Node?
 
@@ -134,7 +138,7 @@ python -m venv .venv
 .venv\Scripts\python -m ruff check .
 ```
 
-See [`CONTRIBUTING.md`](CONTRIBUTING.md).
+See [`CONTRIBUTING.md`](CONTRIBUTING.md), and [TROUBLESHOOTING.md](TROUBLESHOOTING.md#python3-on-windows-and-venvbin-versus-venvscripts) for the errors these interpreter and venv path differences produce.
 
 ## Issues
 

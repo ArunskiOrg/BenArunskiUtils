@@ -141,7 +141,7 @@ python -m venv .venv
 .venv\Scripts\python -m pytest
 ```
 
-[`requirements-dev.txt`](requirements-dev.txt) holds the exact `pytest`, `ruff`, and `pyyaml` versions, and CI installs the same file, so these commands give you what CI runs.
+[`requirements-dev.txt`](requirements-dev.txt) holds the exact `pytest`, `ruff`, and `pyyaml` versions, and CI installs the same file, so these commands give you the same tool versions CI uses. CI runs them on Python 3.9, the supported floor; your interpreter is whatever `python` or `python3` resolves to.
 
 See [`CONTRIBUTING.md`](CONTRIBUTING.md), and [TROUBLESHOOTING.md](TROUBLESHOOTING.md#python3-on-windows-and-venvbin-versus-venvscripts) for the errors these interpreter and venv path differences produce.
 

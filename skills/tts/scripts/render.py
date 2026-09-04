@@ -99,7 +99,7 @@ def main():
         f"--rate={args.rate}",
     ]
 
-    print("Rendering — this runs slower than real time; a long document can take several minutes.")
+    print("Conversion started.")
     try:
         subprocess.run(cmd, check=True)
     except subprocess.CalledProcessError:

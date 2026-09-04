@@ -36,13 +36,15 @@ Two cases the three components do not cover on their own:
 ## Before opening a PR
 
 ```
-python3 -m venv .venv && .venv/bin/pip install pytest ruff pyyaml
+python3 -m venv .venv && .venv/bin/pip install -r requirements-dev.txt
 .venv/bin/python -m ruff check .
 .venv/bin/python scripts/validate_skill_frontmatter.py
 .venv/bin/python -m pytest
 ```
 
 (Windows: `.venv\Scripts\pip`, etc.) All three run in CI on every PR; a red check blocks merge.
+
+`requirements-dev.txt` pins `pytest`, `ruff`, and `pyyaml` to exact versions and is the only place those versions are written down. CI installs that same file, so a local run uses the identical tools and a new `ruff` release cannot turn a green PR red on its own. To take a newer version, edit `requirements-dev.txt`, run the four commands above, and fix whatever the new version reports in the same PR. `pytest` cannot move past 8.4.2 while Python 3.9 is the supported floor.
 
 If you're changing a skill's behavior, re-run it end to end in Claude Code and describe what you verified in the PR description — not just that tests pass.
 

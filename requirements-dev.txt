@@ -1,0 +1,9 @@
+# Exact development tool versions. CI and the documented local setup both install
+# this file, so a lint or test result reproduces across machines and an upstream
+# release changes the build only when this file changes.
+#
+# pytest 8.4.2 is the last release that supports Python 3.9, the interpreter floor
+# this project targets and the version CI runs.
+pytest==8.4.2
+ruff==0.16.2
+pyyaml==6.0.3

@@ -47,7 +47,7 @@ uv tool install "edge-tts>=7.2.8"   # for tts only; see Prerequisites above for 
 - `--copy` to copy the files rather than symlink them
 - `-l` to list what's in the repo without installing anything
 
-With `-g`, the CLI records each skill's source and a hash of the skill folder as fetched at install time in `~/.agents/.skill-lock.json`; project-level installs write `skills-lock.json` in the project root instead. `npx skills update` re-hashes the source and flags a mismatch, so a change to this repo surfaces as an available update rather than arriving silently; the installed files are not re-hashed, so edits made locally after install are not detected.
+With `-g`, the CLI records each skill's source and a hash of the skill folder as fetched at install time in `~/.agents/.skill-lock.json`; project-level installs write `skills-lock.json` in the project root instead. `npx skills update` compares that recorded hash against the source's current one and offers an update when they differ, so a change to this repo is visible rather than silent; it never re-hashes your installed copy, so edits made to those files after install are not detected.
 
 `tts`'s first run verifies the engine and records your choice, and other engines are available — see [`skills/tts/README.md`](skills/tts/README.md).
 

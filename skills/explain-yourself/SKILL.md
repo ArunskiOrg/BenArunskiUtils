@@ -1,6 +1,7 @@
 ---
 name: explain-yourself
 description: Explain a code file, directory, pull request, commit, or diff, spoken aloud by default when the tts skill is installed, in writing otherwise. Matches the explanation to what it's explaining, a PR/commit/diff gets a file-by-file walkthrough of what changed and why (not a code listing); a file or directory gets a top-down explanation (structure, then how the pieces interact, then the details that matter), with exact code shown only where necessary. Adapts to stated context like "I'm a novice in Terraform." Use when the user wants a PR/commit/diff/file/directory explained, walked through, or summarized, or wants to listen to one. For a document that's already prose, use the tts skill directly.
+version: 1.0.0
 ---
 
 # Explain yourself! — code and change explanations, written or spoken

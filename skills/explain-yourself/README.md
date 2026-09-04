@@ -19,7 +19,7 @@ Then ask Claude to explain a PR, commit, diff, file, or directory: "explain PR 4
 - Python 3.9+ to run `scripts/resolve_source.py`.
 - `git` on `PATH` for commit sources.
 - `gh` on `PATH`, authenticated, for pull request sources.
-- The `tts` skill, installed as a sibling, for the default spoken output. Without it, explanations are text only.
+- The `tts` skill, version 1.0.0 or later, installed as a sibling, for the default spoken output. The dependency is optional: without it, explanations are text only.
 
 ## Permissions and network egress
 

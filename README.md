@@ -115,27 +115,30 @@ bash / zsh:
 
 ```bash
 python3 -m venv .venv
-.venv/bin/pip install pytest ruff
-.venv/bin/python -m pytest
+.venv/bin/pip install pytest ruff pyyaml
 .venv/bin/python -m ruff check .
+.venv/bin/python scripts/validate_skill_frontmatter.py
+.venv/bin/python -m pytest
 ```
 
 PowerShell (Windows venvs put executables in `Scripts`, not `bin`):
 
 ```powershell
 python -m venv .venv
-.venv/Scripts/pip install pytest ruff
-.venv/Scripts/python -m pytest
+.venv/Scripts/pip install pytest ruff pyyaml
 .venv/Scripts/python -m ruff check .
+.venv/Scripts/python scripts/validate_skill_frontmatter.py
+.venv/Scripts/python -m pytest
 ```
 
 Command Prompt:
 
 ```bat
 python -m venv .venv
-.venv\Scripts\pip install pytest ruff
-.venv\Scripts\python -m pytest
+.venv\Scripts\pip install pytest ruff pyyaml
 .venv\Scripts\python -m ruff check .
+.venv\Scripts\python scripts/validate_skill_frontmatter.py
+.venv\Scripts\python -m pytest
 ```
 
 See [`CONTRIBUTING.md`](CONTRIBUTING.md), and [TROUBLESHOOTING.md](TROUBLESHOOTING.md#python3-on-windows-and-venvbin-versus-venvscripts) for the errors these interpreter and venv path differences produce.

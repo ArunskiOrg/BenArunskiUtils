@@ -16,15 +16,33 @@ This repo holds public Claude Code skills and small standalone utilities. A skil
 - A script that depends on an external tool checks for it up front and fails with install instructions, not partway through.
 - New `.py` files carry a `# SPDX-License-Identifier: MIT` line after the shebang (or as line 1 if there is none).
 
+## Versioning and the changelog
+
+Every `skills/<name>/SKILL.md` carries a semver `version` in its frontmatter, and each skill is versioned on its own. Any PR that changes anything under `skills/<name>/` bumps that skill's `version` and adds a matching entry to `CHANGELOG.md` under the skill's heading, with the version, the date, and what changed. A PR that touches only repo-level files (tests, CI, `evals/`, this document) bumps nothing. A skill added later starts at `1.0.0` once it is published and installable; use a `0.x` version only while it is deliberately unfinished and you are telling installers not to rely on it yet.
+
+Which component to bump, from the installer's position rather than a library's:
+
+- **Major** for a breaking change: the skill is renamed or removed; the trigger `description` changes such that requests that used to route here no longer do, or requests that used to go elsewhere now land here; a bundled script is removed, renamed, or has its command-line contract changed; a new external dependency is required, or an existing one's minimum version rises (a tool on `PATH`, a Python package, an API key, an interpreter floor); the documented behavior in `SKILL.md` changes so that the same request produces a different result than before, such as a different output filename convention, a changed hand-off shape between the skill and its agents, or a changed order in which sources are resolved; or the skill drops support for an input it used to accept. What these share is that an existing installation stops behaving as it did, and re-reading the skill before updating is warranted.
+- **Minor** for new capability that leaves existing behavior intact: a new supported input, a new bundled script, a `description` widened to cover phrasings that previously routed nowhere. Classify a `description` edit by what the [Behavioral evals](#behavioral-evals) show routing actually did, not by the size of the edit.
+- **Patch** for corrections that change no contract: wording, typos, a bug fix in a script that restores documented behavior. If a change resists all three, treat it as Major and say why in the changelog entry. Classifying by elimination is how a break gets shipped as a patch.
+
+Two cases the three components do not cover on their own:
+
+- **A skill that depends on another skill.** `explain-yourself` uses `tts` when it is installed. Record the version it needs in its own `README.md` requirements, and bump the dependent skill whenever the version it needs rises: Major if it now requires a `tts` version an existing install would not have, Minor if the dependency stays optional and the skill still works without it. A Major in `tts` does not automatically bump `explain-yourself`; what matters is whether the dependent skill's own behavior changed.
+- **A skill that is renamed or removed.** There is no frontmatter left to bump, so the record lives only in `CHANGELOG.md`. Give a removal its own entry under the old name stating the last shipped version and that it is gone. For a rename, close out the old name's entry, start the new name's history at the version the old name reached rather than back at `1.0.0`, and say in both entries that they are the same skill, so someone tracking an installed copy can follow it across the rename.
+
+`scripts/validate_skill_frontmatter.py` rejects a missing or non-semver `version` and runs in CI, alongside two size limits it also enforces: a `SKILL.md` body is capped at 500 lines after the frontmatter, and every markdown file inside a skill's own folder that its `SKILL.md` can reach by links must sit at most one hop from it. Links leaving the folder are not followed, since the skill on the other end owns its own reference tree. Both limits bound what an agent loads before it can act, so content that outgrows them belongs in `README.md` or here rather than deeper in the reference tree.
+
 ## Before opening a PR
 
 ```
-python3 -m venv .venv && .venv/bin/pip install pytest ruff
+python3 -m venv .venv && .venv/bin/pip install pytest ruff pyyaml
 .venv/bin/python -m ruff check .
+.venv/bin/python scripts/validate_skill_frontmatter.py
 .venv/bin/python -m pytest
 ```
 
-(Windows: `.venv\Scripts\pip`, etc.) Both run in CI on every PR; a red check blocks merge.
+(Windows: `.venv\Scripts\pip`, etc.) All three run in CI on every PR; a red check blocks merge.
 
 If you're changing a skill's behavior, re-run it end to end in Claude Code and describe what you verified in the PR description — not just that tests pass.
 

@@ -13,6 +13,8 @@ Constraints enforced (from Anthropic's skill authoring documentation):
   name         required, <= 64 characters, lowercase letters/digits/hyphens only,
                and must not contain "anthropic" or "claude"
   description  required, non-empty, <= 1024 characters, no XML tags
+  version      required, a semver 2.0.0 string (MAJOR.MINOR.PATCH, optional
+               prerelease and build metadata)
   body         <= 500 lines after the frontmatter block
   references   every markdown file reachable by markdown links from a SKILL.md
                sits at most one hop away from it
@@ -21,6 +23,9 @@ The body and reference limits bound what an agent has to load before it can act:
 a long body is read in full on every invocation, and a reference more than one
 hop away is only found after reading an intermediate file whose only purpose is
 to point further.
+
+The version is what an installer compares to tell a patch from a behavior
+change, so an absent or unparseable version is a failure rather than a warning.
 
 Frontmatter is parsed with yaml.safe_load, which constructs plain Python types
 only. yaml.load with the default loader can instantiate arbitrary objects named
@@ -41,6 +46,16 @@ BODY_MAX_LINES = 500
 REFERENCE_MAX_HOPS = 1
 NAME_PATTERN = re.compile(r"^[a-z0-9-]+$")
 RESERVED_NAME_SUBSTRINGS = ("anthropic", "claude")
+# Semver 2.0.0: three non-negative integers without leading zeros, then an
+# optional dot-separated prerelease and an optional dot-separated build
+# metadata section. Written out rather than pulled from a package so validation
+# needs nothing beyond pyyaml.
+VERSION_PATTERN = re.compile(
+    r"\A(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)"
+    r"(?:-(?:0|[1-9]\d*|\d*[A-Za-z-][0-9A-Za-z-]*)"
+    r"(?:\.(?:0|[1-9]\d*|\d*[A-Za-z-][0-9A-Za-z-]*))*)?"
+    r"(?:\+[0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*)?\Z"
+)
 # Matches an opening, closing, or self-closing tag, so `</foo>` and `<foo/>` are
 # caught alongside `<foo>`.
 XML_TAG_PATTERN = re.compile(r"<[?/]?[A-Za-z][^>]*>")
@@ -120,6 +135,18 @@ def check_description(value: object) -> list[str]:
     return problems
 
 
+def check_version(value: object) -> list[str]:
+    if value is None:
+        return ["'version' is missing"]
+    # YAML reads an unquoted 1.0 as a float and an unquoted 1 as an int, so a
+    # non-string value here is nearly always a version with too few parts.
+    if not isinstance(value, str):
+        return [f"'version' must be a semver string, got {type(value).__name__}: {value!r}"]
+    if not VERSION_PATTERN.match(value):
+        return [f"'version' must be semver MAJOR.MINOR.PATCH: {value!r}"]
+    return []
+
+
 def check_body_length(body: str) -> list[str]:
     lines = len(body.splitlines())
     if lines > BODY_MAX_LINES:
@@ -179,7 +206,11 @@ def check_reference_depth(path: Path) -> list[str]:
 
 def validate_frontmatter(frontmatter: dict) -> list[str]:
     """Return every constraint violation in a parsed frontmatter mapping."""
-    return check_name(frontmatter.get("name")) + check_description(frontmatter.get("description"))
+    return (
+        check_name(frontmatter.get("name"))
+        + check_description(frontmatter.get("description"))
+        + check_version(frontmatter.get("version"))
+    )
 
 
 def validate_file(path: Path) -> list[str]:

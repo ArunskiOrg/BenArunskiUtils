@@ -1,7 +1,7 @@
 ---
 name: tts
 description: Convert a text/markdown document into spoken-word MP3 audio, after rewriting the source into speech-friendly prose (making non-text elements readable aloud). Use when the user asks to convert a document to audio, to read something aloud, mentions TTS or "text to speech", or says to "speak" something. Do NOT auto-engage on bare "say" / "tell me" idioms — those usually want a visual reply; instead ask "btw, do you want mp3 output?" - in that case, only run this skill if they confirm.
-version: 1.0.0
+version: 1.0.1
 ---
 
 # tts — document to speech
@@ -79,4 +79,4 @@ Path variables used below:
      }
      ```
 
-4. **Convert (primary thread).** Warn the user up front: rendering is slower than real time — a long document can take minutes. Run `python3 <SKILL_DIR>/scripts/render.py <final -passN.txt> -o "<output folder>/<basename>.mp3"` and relay its output verbatim: it checks the engine's CLI is installed before starting, and if the render call itself fails (e.g. a sandboxed shell blocking the network call), it prints the exact command for the user to run themselves. Offer `--list-voices` or a different `--rate` if the user wants one.
+4. **Convert (primary thread).** Tell the user up front that conversion started. Run `python3 <SKILL_DIR>/scripts/render.py <final -passN.txt> -o "<output folder>/<basename>.mp3"` and relay its output verbatim: it checks the engine's CLI is installed before starting, and if the render call itself fails (e.g. a sandboxed shell blocking the network call), it prints the exact command for the user to run themselves. Offer `--list-voices` or a different `--rate` if the user wants one.

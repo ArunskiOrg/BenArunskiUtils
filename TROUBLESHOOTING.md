@@ -81,7 +81,7 @@ Fix: use `python` or `py -3`, and the `Scripts` path.
 
 ```powershell
 py -3 -m venv .venv
-.venv/Scripts/pip install pytest ruff
+.venv/Scripts/pip install -r requirements-dev.txt
 .venv/Scripts/python -m pytest
 ```
 

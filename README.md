@@ -115,7 +115,7 @@ bash / zsh:
 
 ```bash
 python3 -m venv .venv
-.venv/bin/pip install pytest ruff pyyaml
+.venv/bin/pip install -r requirements-dev.txt
 .venv/bin/python -m ruff check .
 .venv/bin/python scripts/validate_skill_frontmatter.py
 .venv/bin/python -m pytest
@@ -125,7 +125,7 @@ PowerShell (Windows venvs put executables in `Scripts`, not `bin`):
 
 ```powershell
 python -m venv .venv
-.venv/Scripts/pip install pytest ruff pyyaml
+.venv/Scripts/pip install -r requirements-dev.txt
 .venv/Scripts/python -m ruff check .
 .venv/Scripts/python scripts/validate_skill_frontmatter.py
 .venv/Scripts/python -m pytest
@@ -135,11 +135,13 @@ Command Prompt:
 
 ```bat
 python -m venv .venv
-.venv\Scripts\pip install pytest ruff pyyaml
+.venv\Scripts\pip install -r requirements-dev.txt
 .venv\Scripts\python -m ruff check .
 .venv\Scripts\python scripts/validate_skill_frontmatter.py
 .venv\Scripts\python -m pytest
 ```
+
+[`requirements-dev.txt`](requirements-dev.txt) holds the exact `pytest`, `ruff`, and `pyyaml` versions, and CI installs the same file, so these commands give you the same tool versions CI uses. CI runs them on Python 3.9, the supported floor; your interpreter is whatever `python` or `python3` resolves to.
 
 See [`CONTRIBUTING.md`](CONTRIBUTING.md), and [TROUBLESHOOTING.md](TROUBLESHOOTING.md#python3-on-windows-and-venvbin-versus-venvscripts) for the errors these interpreter and venv path differences produce.
 

@@ -47,6 +47,8 @@ uv tool install "edge-tts>=7.2.8"   # for tts only; see Prerequisites above for 
 - `--copy` to copy the files rather than symlink them
 - `-l` to list what's in the repo without installing anything
 
+With `-g`, the CLI records each skill's source and a hash of the skill folder as fetched at install time in `.skill-lock.json` under your user state directory, `~/.agents/` unless `XDG_STATE_HOME` is set; project-level installs write `skills-lock.json` in the project root instead. `npx skills update` compares that recorded hash against the source's current one and offers an update when they differ, so a change to this repo is visible rather than silent; it never re-hashes your installed copy, so edits made to those files after install are not detected.
+
 `tts`'s first run verifies the engine and records your choice, and other engines are available — see [`skills/tts/README.md`](skills/tts/README.md).
 
 Inside Claude Code, the same two skills install as plugins from this repo's own marketplace, without the `skills` CLI. This installs the skill files only, so `tts` still needs `edge-tts` (or another engine) installed separately, as above:

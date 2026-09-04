@@ -5,6 +5,6 @@
 # pytest 9.0 raised its floor to Python 3.10, so the 8.4.x line is where pytest stays
 # while Python 3.9 is the interpreter floor this project targets and the version CI
 # runs. 8.4.2 is the newest release on that line.
-pytest==8.4.2
+pytest==9.0.3
 ruff==0.16.2
 pyyaml==6.0.3

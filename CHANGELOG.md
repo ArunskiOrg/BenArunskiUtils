@@ -17,6 +17,13 @@ Initial recorded version, covering the skill as already published. No behavior c
 
 ## tts
 
+### 1.0.1 - 2026-09-03
+
+Wording correction to the message shown when rendering begins. No change to render behavior, arguments, or output paths.
+
+- `scripts/render.py` prints "Conversion started." in place of a warning about render speed.
+- `SKILL.md` step 4 instructs the agent to state that conversion started, matching what the script prints.
+
 ### 1.0.0 - 2026-08-28
 
 Initial recorded version, covering the skill as already published. No behavior change accompanies the version field.

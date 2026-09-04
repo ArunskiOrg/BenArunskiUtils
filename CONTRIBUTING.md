@@ -44,7 +44,7 @@ python3 -m venv .venv && .venv/bin/pip install -r requirements-dev.txt
 
 (Windows: `.venv\Scripts\pip`, etc.) All three run in CI on every PR; a red check blocks merge.
 
-`requirements-dev.txt` pins `pytest`, `ruff`, and `pyyaml` to exact versions and is the only place those versions are written down. CI installs that same file, so a local run uses the identical tools and a new `ruff` release cannot turn a green PR red on its own. To take a newer version, edit `requirements-dev.txt`, run the commands above, and fix whatever the new version reports in the same PR. `pytest` stays on the last line that supports Python 3.9 while 3.9 is the floor; the reason is in the file's own header comment.
+`requirements-dev.txt` pins `pytest`, `ruff`, and `pyyaml` to exact versions and is the only place those versions are written down. CI installs that same file, so `pytest`, `ruff`, and `pyyaml` are at identical versions locally and in CI, and a new `ruff` release cannot turn a green PR red on its own. Their transitive dependencies and your local Python version are not pinned; CI runs Python 3.9. To take a newer version, edit `requirements-dev.txt`, run the commands above, and fix whatever the new version reports in the same PR. `pytest` stays on the last line that supports Python 3.9 while 3.9 is the floor; the reason is in the file's own header comment.
 
 If you're changing a skill's behavior, re-run it end to end in Claude Code and describe what you verified in the PR description — not just that tests pass.
 
